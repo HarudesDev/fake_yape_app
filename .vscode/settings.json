@@ -1,0 +1,49 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/stable",
+  "cSpell.words": [
+    "appspot",
+    "ARGB",
+    "barcodes",
+    "Bezier",
+    "bgra",
+    "camerawesome",
+    "Castillista",
+    "cupertino",
+    "Cuucuu",
+    "firestore",
+    "LTRB",
+    "mlkit",
+    "nodoc",
+    "Reclip",
+    "RGBO",
+    "riverpod",
+    "Schyler",
+    "spinkit",
+    "supabase",
+    "Vergil",
+    "wisy",
+    "yape",
+    "Yapear",
+    "Yapeaste",
+    "yapeo",
+    "Yapeos",
+    "yapera"
+  ],
+  "[dart]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always"
+    },
+    "editor.rulers": [
+      80
+    ],
+  },
+  "editor.formatOnSave": true,
+  "editor.stickyScroll.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.dart": "${capture}.g.dart, ${capture}.freezed.dart"
+  },
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "dart.previewFlutterUiGuides": true
+}
