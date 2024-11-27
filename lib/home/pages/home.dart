@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:gap/gap.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+//import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
@@ -49,7 +53,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final future = Supabase.instance.client.from('countries').select();
+    //final future = Supabase.instance.client.from('countries').select();
 
     return SafeArea(
       child: Container(
@@ -101,22 +105,6 @@ class HomePage extends StatelessWidget {
           ),
           body: Column(
             children: [
-              FutureBuilder(
-                future: future,
-                builder: ((context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  final countries = snapshot.data;
-                  return Column(
-                    children: countries!.map((snapshot) {
-                      return Text(snapshot['name']);
-                    }).toList(),
-                  );
-                }),
-              ),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,8 +199,20 @@ class HomePage extends StatelessWidget {
                   SizedBox(
                     //TODO implementar navegación
                     child: OutlinedButton.icon(
-                      onPressed: () {
-                        AutoRouter.of(context).push(const YapeDirectoryRoute());
+                      onPressed: () async {
+                        final permissionStatus =
+                            await Permission.contacts.request();
+                        if (!permissionStatus.isGranted) {
+                          log("Permisos no concedidos");
+                        } else {
+                          final contacts = await FlutterContacts.getContacts(
+                              withProperties: true);
+                          print(contacts[0]);
+                          if (context.mounted) {
+                            AutoRouter.of(context)
+                                .push(YapeDirectoryRoute(contacts: contacts));
+                          }
+                        }
                       },
                       label: const Text(
                         "Yapear",

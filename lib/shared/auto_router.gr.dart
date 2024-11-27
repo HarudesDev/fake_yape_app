@@ -21,6 +21,7 @@ import 'package:fake_yape_app/yape/pages/qr_reader.dart' as _i5;
 import 'package:fake_yape_app/yape/pages/yape_detail.dart' as _i10;
 import 'package:fake_yape_app/yape/pages/yape_directory.dart' as _i11;
 import 'package:flutter/material.dart' as _i13;
+import 'package:flutter_contacts/flutter_contacts.dart' as _i14;
 
 /// generated route for
 /// [_i1.HomePage]
@@ -241,10 +242,17 @@ class YapeDetailRoute extends _i12.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i11.YapeDirectoryPage]
-class YapeDirectoryRoute extends _i12.PageRouteInfo<void> {
-  const YapeDirectoryRoute({List<_i12.PageRouteInfo>? children})
-      : super(
+class YapeDirectoryRoute extends _i12.PageRouteInfo<YapeDirectoryRouteArgs> {
+  YapeDirectoryRoute({
+    _i13.Key? key,
+    required List<_i14.Contact> contacts,
+    List<_i12.PageRouteInfo>? children,
+  }) : super(
           YapeDirectoryRoute.name,
+          args: YapeDirectoryRouteArgs(
+            key: key,
+            contacts: contacts,
+          ),
           initialChildren: children,
         );
 
@@ -253,7 +261,27 @@ class YapeDirectoryRoute extends _i12.PageRouteInfo<void> {
   static _i12.PageInfo page = _i12.PageInfo(
     name,
     builder: (data) {
-      return const _i11.YapeDirectoryPage();
+      final args = data.argsAs<YapeDirectoryRouteArgs>();
+      return _i11.YapeDirectoryPage(
+        key: args.key,
+        contacts: args.contacts,
+      );
     },
   );
+}
+
+class YapeDirectoryRouteArgs {
+  const YapeDirectoryRouteArgs({
+    this.key,
+    required this.contacts,
+  });
+
+  final _i13.Key? key;
+
+  final List<_i14.Contact> contacts;
+
+  @override
+  String toString() {
+    return 'YapeDirectoryRouteArgs{key: $key, contacts: $contacts}';
+  }
 }
