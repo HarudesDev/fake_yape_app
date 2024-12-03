@@ -11,7 +11,7 @@ class Wrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Supabase.instance.client.auth.signOut();
-    return Supabase.instance.client.auth.currentUser != null
+    return Supabase.instance.client.auth.currentUser == null
         ? const WelcomePage()
         : const HomePage();
   }

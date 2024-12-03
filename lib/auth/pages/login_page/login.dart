@@ -1,3 +1,4 @@
+import 'package:fake_yape_app/auth/pages/secure_keyboard.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:flutter/material.dart';
 
@@ -207,8 +208,9 @@ class _LoginFormState extends State<LoginForm> {
                   ? null
                   : () {
                       AutoRouter.of(context).push(
-                        LoginPasswordRoute(
-                          email: _email,
+                        SecureKeyboardRoute(
+                          parameters: {'email': _email},
+                          pageType: SecureKeyboardPageType.loginPage,
                         ),
                       );
                     },
