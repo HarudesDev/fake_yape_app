@@ -71,7 +71,9 @@ class HomePage extends StatelessWidget {
             title: Row(
               children: [
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    AutoRouter.of(context).push(MenuRoute());
+                  },
                   child: const Icon(
                     Icons.menu,
                     color: Colors.white,

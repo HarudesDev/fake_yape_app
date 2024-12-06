@@ -18,6 +18,7 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: RegisterRoute.page),
         AutoRoute(page: RegisterDataRoute.page),
         AutoRoute(page: HomeRoute.page),
+        AutoRoute(page: MenuRoute.page),
         AutoRoute(page: MakeYapeRoute.page),
         AutoRoute(page: QrReaderRoute.page),
         AutoRoute(page: YapeDetailRoute.page),

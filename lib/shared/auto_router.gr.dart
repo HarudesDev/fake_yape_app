@@ -8,27 +8,28 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
+import 'package:auto_route/auto_route.dart' as _i14;
 import 'package:fake_yape_app/auth/pages/login_page/login.dart' as _i2;
 import 'package:fake_yape_app/auth/pages/register_data_page/register_data.dart'
-    as _i5;
-import 'package:fake_yape_app/auth/pages/register_page/register.dart' as _i6;
-import 'package:fake_yape_app/auth/pages/secure_keyboard.dart' as _i7;
-import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart' as _i9;
-import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i10;
+    as _i6;
+import 'package:fake_yape_app/auth/pages/register_page/register.dart' as _i7;
+import 'package:fake_yape_app/auth/pages/secure_keyboard.dart' as _i8;
+import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart' as _i10;
+import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i11;
 import 'package:fake_yape_app/home/pages/home.dart' as _i1;
-import 'package:fake_yape_app/home/pages/transactions.dart' as _i8;
+import 'package:fake_yape_app/home/pages/menu_page/menu.dart' as _i4;
+import 'package:fake_yape_app/home/pages/transactions.dart' as _i9;
 import 'package:fake_yape_app/yape/pages/make_yape.dart' as _i3;
-import 'package:fake_yape_app/yape/pages/qr_reader.dart' as _i4;
-import 'package:fake_yape_app/yape/pages/yape_detail.dart' as _i11;
-import 'package:fake_yape_app/yape/pages/yape_directory.dart' as _i12;
-import 'package:flutter/material.dart' as _i14;
-import 'package:flutter_contacts/flutter_contacts.dart' as _i15;
+import 'package:fake_yape_app/yape/pages/qr_reader.dart' as _i5;
+import 'package:fake_yape_app/yape/pages/yape_detail.dart' as _i12;
+import 'package:fake_yape_app/yape/pages/yape_directory.dart' as _i13;
+import 'package:flutter/material.dart' as _i15;
+import 'package:flutter_contacts/flutter_contacts.dart' as _i16;
 
 /// generated route for
 /// [_i1.HomePage]
-class HomeRoute extends _i13.PageRouteInfo<void> {
-  const HomeRoute({List<_i13.PageRouteInfo>? children})
+class HomeRoute extends _i14.PageRouteInfo<void> {
+  const HomeRoute({List<_i14.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
           initialChildren: children,
@@ -36,7 +37,7 @@ class HomeRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return const _i1.HomePage();
@@ -46,8 +47,8 @@ class HomeRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.LoginPage]
-class LoginRoute extends _i13.PageRouteInfo<void> {
-  const LoginRoute({List<_i13.PageRouteInfo>? children})
+class LoginRoute extends _i14.PageRouteInfo<void> {
+  const LoginRoute({List<_i14.PageRouteInfo>? children})
       : super(
           LoginRoute.name,
           initialChildren: children,
@@ -55,7 +56,7 @@ class LoginRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'LoginRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return const _i2.LoginPage();
@@ -65,8 +66,8 @@ class LoginRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.MakeYapePage]
-class MakeYapeRoute extends _i13.PageRouteInfo<void> {
-  const MakeYapeRoute({List<_i13.PageRouteInfo>? children})
+class MakeYapeRoute extends _i14.PageRouteInfo<void> {
+  const MakeYapeRoute({List<_i14.PageRouteInfo>? children})
       : super(
           MakeYapeRoute.name,
           initialChildren: children,
@@ -74,7 +75,7 @@ class MakeYapeRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'MakeYapeRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       return const _i3.MakeYapePage();
@@ -83,9 +84,44 @@ class MakeYapeRoute extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i4.QrReaderPage]
-class QrReaderRoute extends _i13.PageRouteInfo<void> {
-  const QrReaderRoute({List<_i13.PageRouteInfo>? children})
+/// [_i4.MenuPage]
+class MenuRoute extends _i14.PageRouteInfo<MenuRouteArgs> {
+  MenuRoute({
+    _i15.Key? key,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
+          MenuRoute.name,
+          args: MenuRouteArgs(key: key),
+          initialChildren: children,
+        );
+
+  static const String name = 'MenuRoute';
+
+  static _i14.PageInfo page = _i14.PageInfo(
+    name,
+    builder: (data) {
+      final args =
+          data.argsAs<MenuRouteArgs>(orElse: () => const MenuRouteArgs());
+      return _i4.MenuPage(key: args.key);
+    },
+  );
+}
+
+class MenuRouteArgs {
+  const MenuRouteArgs({this.key});
+
+  final _i15.Key? key;
+
+  @override
+  String toString() {
+    return 'MenuRouteArgs{key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i5.QrReaderPage]
+class QrReaderRoute extends _i14.PageRouteInfo<void> {
+  const QrReaderRoute({List<_i14.PageRouteInfo>? children})
       : super(
           QrReaderRoute.name,
           initialChildren: children,
@@ -93,21 +129,21 @@ class QrReaderRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'QrReaderRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i4.QrReaderPage();
+      return const _i5.QrReaderPage();
     },
   );
 }
 
 /// generated route for
-/// [_i5.RegisterDataPage]
-class RegisterDataRoute extends _i13.PageRouteInfo<RegisterDataRouteArgs> {
+/// [_i6.RegisterDataPage]
+class RegisterDataRoute extends _i14.PageRouteInfo<RegisterDataRouteArgs> {
   RegisterDataRoute({
-    _i14.Key? key,
+    _i15.Key? key,
     required String phoneNumber,
-    List<_i13.PageRouteInfo>? children,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           RegisterDataRoute.name,
           args: RegisterDataRouteArgs(
@@ -119,11 +155,11 @@ class RegisterDataRoute extends _i13.PageRouteInfo<RegisterDataRouteArgs> {
 
   static const String name = 'RegisterDataRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<RegisterDataRouteArgs>();
-      return _i5.RegisterDataPage(
+      return _i6.RegisterDataPage(
         key: args.key,
         phoneNumber: args.phoneNumber,
       );
@@ -137,7 +173,7 @@ class RegisterDataRouteArgs {
     required this.phoneNumber,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
   final String phoneNumber;
 
@@ -148,9 +184,9 @@ class RegisterDataRouteArgs {
 }
 
 /// generated route for
-/// [_i6.RegisterPage]
-class RegisterRoute extends _i13.PageRouteInfo<void> {
-  const RegisterRoute({List<_i13.PageRouteInfo>? children})
+/// [_i7.RegisterPage]
+class RegisterRoute extends _i14.PageRouteInfo<void> {
+  const RegisterRoute({List<_i14.PageRouteInfo>? children})
       : super(
           RegisterRoute.name,
           initialChildren: children,
@@ -158,22 +194,22 @@ class RegisterRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'RegisterRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i6.RegisterPage();
+      return const _i7.RegisterPage();
     },
   );
 }
 
 /// generated route for
-/// [_i7.SecureKeyboardPage]
-class SecureKeyboardRoute extends _i13.PageRouteInfo<SecureKeyboardRouteArgs> {
+/// [_i8.SecureKeyboardPage]
+class SecureKeyboardRoute extends _i14.PageRouteInfo<SecureKeyboardRouteArgs> {
   SecureKeyboardRoute({
-    _i14.Key? key,
+    _i15.Key? key,
     required Map<String, dynamic> parameters,
-    required _i7.SecureKeyboardPageType pageType,
-    List<_i13.PageRouteInfo>? children,
+    required _i8.SecureKeyboardPageType pageType,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           SecureKeyboardRoute.name,
           args: SecureKeyboardRouteArgs(
@@ -186,11 +222,11 @@ class SecureKeyboardRoute extends _i13.PageRouteInfo<SecureKeyboardRouteArgs> {
 
   static const String name = 'SecureKeyboardRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<SecureKeyboardRouteArgs>();
-      return _i7.SecureKeyboardPage(
+      return _i8.SecureKeyboardPage(
         key: args.key,
         parameters: args.parameters,
         pageType: args.pageType,
@@ -206,11 +242,11 @@ class SecureKeyboardRouteArgs {
     required this.pageType,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
   final Map<String, dynamic> parameters;
 
-  final _i7.SecureKeyboardPageType pageType;
+  final _i8.SecureKeyboardPageType pageType;
 
   @override
   String toString() {
@@ -219,9 +255,9 @@ class SecureKeyboardRouteArgs {
 }
 
 /// generated route for
-/// [_i8.TransactionsPage]
-class TransactionsRoute extends _i13.PageRouteInfo<void> {
-  const TransactionsRoute({List<_i13.PageRouteInfo>? children})
+/// [_i9.TransactionsPage]
+class TransactionsRoute extends _i14.PageRouteInfo<void> {
+  const TransactionsRoute({List<_i14.PageRouteInfo>? children})
       : super(
           TransactionsRoute.name,
           initialChildren: children,
@@ -229,18 +265,18 @@ class TransactionsRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'TransactionsRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i8.TransactionsPage();
+      return const _i9.TransactionsPage();
     },
   );
 }
 
 /// generated route for
-/// [_i9.WelcomePage]
-class WelcomeRoute extends _i13.PageRouteInfo<void> {
-  const WelcomeRoute({List<_i13.PageRouteInfo>? children})
+/// [_i10.WelcomePage]
+class WelcomeRoute extends _i14.PageRouteInfo<void> {
+  const WelcomeRoute({List<_i14.PageRouteInfo>? children})
       : super(
           WelcomeRoute.name,
           initialChildren: children,
@@ -248,18 +284,18 @@ class WelcomeRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'WelcomeRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i9.WelcomePage();
+      return const _i10.WelcomePage();
     },
   );
 }
 
 /// generated route for
-/// [_i10.Wrapper]
-class Wrapper extends _i13.PageRouteInfo<void> {
-  const Wrapper({List<_i13.PageRouteInfo>? children})
+/// [_i11.Wrapper]
+class Wrapper extends _i14.PageRouteInfo<void> {
+  const Wrapper({List<_i14.PageRouteInfo>? children})
       : super(
           Wrapper.name,
           initialChildren: children,
@@ -267,18 +303,18 @@ class Wrapper extends _i13.PageRouteInfo<void> {
 
   static const String name = 'Wrapper';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i10.Wrapper();
+      return const _i11.Wrapper();
     },
   );
 }
 
 /// generated route for
-/// [_i11.YapeDetailPage]
-class YapeDetailRoute extends _i13.PageRouteInfo<void> {
-  const YapeDetailRoute({List<_i13.PageRouteInfo>? children})
+/// [_i12.YapeDetailPage]
+class YapeDetailRoute extends _i14.PageRouteInfo<void> {
+  const YapeDetailRoute({List<_i14.PageRouteInfo>? children})
       : super(
           YapeDetailRoute.name,
           initialChildren: children,
@@ -286,21 +322,21 @@ class YapeDetailRoute extends _i13.PageRouteInfo<void> {
 
   static const String name = 'YapeDetailRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i11.YapeDetailPage();
+      return const _i12.YapeDetailPage();
     },
   );
 }
 
 /// generated route for
-/// [_i12.YapeDirectoryPage]
-class YapeDirectoryRoute extends _i13.PageRouteInfo<YapeDirectoryRouteArgs> {
+/// [_i13.YapeDirectoryPage]
+class YapeDirectoryRoute extends _i14.PageRouteInfo<YapeDirectoryRouteArgs> {
   YapeDirectoryRoute({
-    _i14.Key? key,
-    required List<_i15.Contact> contacts,
-    List<_i13.PageRouteInfo>? children,
+    _i15.Key? key,
+    required List<_i16.Contact> contacts,
+    List<_i14.PageRouteInfo>? children,
   }) : super(
           YapeDirectoryRoute.name,
           args: YapeDirectoryRouteArgs(
@@ -312,11 +348,11 @@ class YapeDirectoryRoute extends _i13.PageRouteInfo<YapeDirectoryRouteArgs> {
 
   static const String name = 'YapeDirectoryRoute';
 
-  static _i13.PageInfo page = _i13.PageInfo(
+  static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
       final args = data.argsAs<YapeDirectoryRouteArgs>();
-      return _i12.YapeDirectoryPage(
+      return _i13.YapeDirectoryPage(
         key: args.key,
         contacts: args.contacts,
       );
@@ -330,9 +366,9 @@ class YapeDirectoryRouteArgs {
     required this.contacts,
   });
 
-  final _i14.Key? key;
+  final _i15.Key? key;
 
-  final List<_i15.Contact> contacts;
+  final List<_i16.Contact> contacts;
 
   @override
   String toString() {
