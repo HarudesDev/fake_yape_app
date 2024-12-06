@@ -111,6 +111,9 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
           ? _supaBase.auth.currentUser!.id
           : "Sin acceder");
     }
+    if (mounted) {
+      AutoRouter.of(context).popUntilRoot();
+    }
   }
 
   Future<void> _register() async {
@@ -143,6 +146,9 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
           'account_balance': 500,
           'auth_service_id': authStatus.user!.id,
         });
+        if (mounted) {
+          AutoRouter.of(context).popUntilRoot();
+        }
       }
     } on AuthException catch (error) {
       log('Auth error occurred');
