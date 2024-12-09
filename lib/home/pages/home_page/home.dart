@@ -2,54 +2,19 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
+import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-//import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import 'home_components.dart';
 
 @RoutePage()
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
-
-  static final transactions = <Map<String, String>>[
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-    {
-      'receiverName': 'Saida M. Flores M.',
-      'date': 'Hoy 9:06 AM',
-      'amount': 'S/160.00',
-    },
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +119,10 @@ class HomePage extends StatelessWidget {
               const Gap(10),
               Expanded(
                 child: ListView(
-                  children: [
+                  children: const [
                     //todo: reemplazar la SizedBox por el carrusel
-                    const Gap(50),
-                    TransactionsList(transactions: transactions),
+                    Gap(50),
+                    TransactionsList(),
                   ],
                 ),
               ),
@@ -243,174 +208,6 @@ class HomePage extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class TransactionsList extends StatelessWidget {
-  const TransactionsList({
-    super.key,
-    required this.transactions,
-  });
-
-  final List<Map<String, String>> transactions;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-      ),
-      child: Column(
-        children: [
-          SizedBox(
-            width: double.infinity,
-            height: 60,
-            child: ElevatedButton.icon(
-              style: ButtonStyle(
-                backgroundColor: const WidgetStatePropertyAll(Colors.white),
-                alignment: const AlignmentDirectional(-1, 0),
-                elevation: const WidgetStatePropertyAll<double>(3),
-                shape: getRoundedRectangleBorder(10.0),
-              ),
-              label: const Text(
-                "Mostrar saldo",
-                style: TextStyle(color: mainColor),
-              ),
-              icon: const Icon(
-                Icons.visibility,
-                color: mainColor,
-              ),
-              onPressed: () {},
-            ),
-          ),
-          const Gap(30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Movimientos",
-                style: TextStyle(
-                  color: mainColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-              Row(
-                children: [
-                  const Icon(
-                    Icons.refresh,
-                    color: secondaryColor,
-                    size: 24,
-                  ),
-                  //const VerticalDivider(),
-                  OutlinedButton(
-                    onPressed: () {
-                      AutoRouter.of(context).push(const TransactionsRoute());
-                    },
-                    style: const ButtonStyle(
-                      side: WidgetStatePropertyAll(
-                        BorderSide(color: Colors.transparent),
-                      ),
-                    ),
-                    child: const Text(
-                      "Ver todos",
-                      style: TextStyle(color: secondaryColor),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const Gap(10),
-          const Divider(),
-          ...transactions.map((transaction) {
-            return Column(
-              children: [
-                TransactionTile(transaction: transaction),
-                const Divider(),
-              ],
-            );
-          }),
-        ],
-      ),
-    );
-  }
-}
-
-class AuxiliaryButton extends StatelessWidget {
-  final String imageUrl;
-  final String buttonText;
-
-  const AuxiliaryButton(
-      {super.key, required this.imageUrl, required this.buttonText});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Image.asset(
-          imageUrl,
-          width: 60,
-          height: 60,
-        ),
-        Text(
-          buttonText,
-          style: const TextStyle(color: Colors.white),
-          textAlign: TextAlign.center,
-        )
-      ],
-    );
-  }
-}
-
-class TransactionTile extends StatelessWidget {
-  final Map<String, String> transaction;
-
-  const TransactionTile({super.key, required this.transaction});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                transaction['receiverName']!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
-              const Gap(10),
-              Text(
-                transaction['date']!,
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            transaction['amount']!,
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-            ),
-          ),
-        ],
       ),
     );
   }

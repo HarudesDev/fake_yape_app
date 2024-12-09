@@ -16,7 +16,7 @@ import 'package:fake_yape_app/auth/pages/register_page/register.dart' as _i7;
 import 'package:fake_yape_app/auth/pages/secure_keyboard.dart' as _i8;
 import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart' as _i10;
 import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i11;
-import 'package:fake_yape_app/home/pages/home.dart' as _i1;
+import 'package:fake_yape_app/home/pages/home_page/home.dart' as _i1;
 import 'package:fake_yape_app/home/pages/menu_page/menu.dart' as _i4;
 import 'package:fake_yape_app/home/pages/transactions.dart' as _i9;
 import 'package:fake_yape_app/yape/pages/make_yape.dart' as _i3;
