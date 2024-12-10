@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
+import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:auto_route/auto_route.dart';
@@ -12,7 +13,14 @@ import 'package:share_plus/share_plus.dart';
 
 @RoutePage()
 class YapeDetailPage extends StatefulWidget {
-  const YapeDetailPage({super.key});
+  final Yapeo yapeData;
+  final bool isReceiver;
+
+  const YapeDetailPage({
+    super.key,
+    required this.yapeData,
+    required this.isReceiver,
+  });
 
   @override
   State<YapeDetailPage> createState() => _YapeDetailPageState();
@@ -20,15 +28,12 @@ class YapeDetailPage extends StatefulWidget {
 
 class _YapeDetailPageState extends State<YapeDetailPage> {
   final screenshotController = ScreenshotController();
-  //Uint8List? _imageFile;
-  bool isCapturing = false;
 
   @override
   Widget build(BuildContext context) {
     return Screenshot(
       controller: screenshotController,
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Container(
           width: double.infinity,
           height: double.infinity,
@@ -57,53 +62,51 @@ class _YapeDetailPageState extends State<YapeDetailPage> {
                         padding: const EdgeInsets.symmetric(vertical: 40),
                         width: double.infinity,
                         color: Colors.transparent,
-                        child: const YapeDetail(),
+                        child: YapeDetail(
+                          yapeData: widget.yapeData,
+                          isReceiver: widget.isReceiver,
+                        ),
                       ),
                     )),
                 const Gap(30),
-                !isCapturing
-                    ? Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          BottomButton(
-                            //Todo investigar como hacer botón de compartir
-                            text: "Compartir",
-                            icon: Icons.share_outlined,
-                            color: mainColorLight,
-                            function: () {
-                              setState(() {
-                                isCapturing = true;
-                              });
-                              screenshotController
-                                  .capture(
-                                      delay: const Duration(milliseconds: 20))
-                                  .then((capturedImage) {
-                                log('Compartiendo');
-                                setState(() {
-                                  isCapturing = false;
-                                });
-                                _shareCapturedWidget(capturedImage!);
-                              });
-                            },
-                          ),
-                          BottomButton(
-                            text: "Ir al inicio",
-                            icon: Icons.home_outlined,
-                            color: mainColorLight,
-                            function: () {
-                              AutoRouter.of(context)
-                                  .replaceAll([const HomeRoute()]);
-                            },
-                          ),
-                          BottomButton(
-                            text: "Mis promos",
-                            icon: Icons.local_offer_outlined,
-                            color: secondaryColor,
-                            function: () {},
-                          ),
-                        ],
-                      )
-                    : const Gap(10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    BottomButton(
+                      //Todo investigar como hacer botón de compartir
+                      text: "Compartir",
+                      icon: Icons.share_outlined,
+                      color: mainColorLight,
+                      function: () {
+                        screenshotController
+                            .captureFromWidget(
+                                YapeDetailScreenshot(
+                                  yapeData: widget.yapeData,
+                                  isReceiver: widget.isReceiver,
+                                ),
+                                delay: const Duration(milliseconds: 20))
+                            .then((capturedImage) {
+                          log('Compartiendo');
+                          _shareCapturedWidget(capturedImage);
+                        });
+                      },
+                    ),
+                    BottomButton(
+                      text: "Ir al inicio",
+                      icon: Icons.home_outlined,
+                      color: mainColorLight,
+                      function: () {
+                        AutoRouter.of(context).replaceAll([const HomeRoute()]);
+                      },
+                    ),
+                    BottomButton(
+                      text: "Mis promos",
+                      icon: Icons.local_offer_outlined,
+                      color: secondaryColor,
+                      function: () {},
+                    ),
+                  ],
+                ),
                 const Gap(30),
               ],
             ),
@@ -119,6 +122,61 @@ class _YapeDetailPageState extends State<YapeDetailPage> {
         XFile.fromData(capturedImage, mimeType: 'image/png', name: 'detail.png')
       ],
       fileNameOverrides: ['detail.png'],
+    );
+  }
+}
+
+//TODO Acomodar la apariencia de la screenshot
+class YapeDetailScreenshot extends StatelessWidget {
+  final Yapeo yapeData;
+  final bool isReceiver;
+
+  const YapeDetailScreenshot({
+    super.key,
+    required this.yapeData,
+    required this.isReceiver,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.center,
+          colors: [
+            mainColorDark,
+            mainColor,
+          ],
+        ),
+      ),
+      child: Column(
+        children: [
+          const Gap(45),
+          //Todo Añadir la animación del yape
+          const Gap(100),
+          const Gap(45),
+          Expanded(
+            child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: CustomPaint(
+                  painter: YapeDetailPainter(),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 40),
+                    width: double.infinity,
+                    color: Colors.transparent,
+                    child: YapeDetail(
+                      yapeData: yapeData,
+                      isReceiver: isReceiver,
+                    ),
+                  ),
+                )),
+          ),
+          const Gap(30),
+        ],
+      ),
     );
   }
 }
@@ -159,8 +217,13 @@ class BottomButton extends StatelessWidget {
 }
 
 class YapeDetail extends StatelessWidget {
+  final Yapeo yapeData;
+  final bool isReceiver;
+
   const YapeDetail({
     super.key,
+    required this.yapeData,
+    required this.isReceiver,
   });
 
   @override
@@ -176,11 +239,11 @@ class YapeDetail extends StatelessWidget {
           ),
         ),
         const Gap(10),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Padding(
+            const Padding(
               padding: EdgeInsets.symmetric(vertical: 20.0),
               child: Text(
                 "S/",
@@ -191,23 +254,24 @@ class YapeDetail extends StatelessWidget {
               ),
             ),
             Text(
-              "69",
-              style: TextStyle(
+              yapeData.yapeoAmount.toString(),
+              style: const TextStyle(
                 color: mainColor,
                 fontSize: 55,
               ),
             ),
           ],
         ),
-        const Text(
-          "Alejandro G. Risco D.",
-          style: TextStyle(
+        Text(
+          isReceiver ? yapeData.senderName : yapeData.receiverName,
+          style: const TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w500,
+            color: Colors.black,
           ),
         ),
         Text(
-          "04 nov. 2024 - 8:30 pm",
+          yapeData.yapeoDate.toString(),
           style: TextStyle(
             color: Colors.grey[700],
             fontSize: 14,
@@ -215,21 +279,24 @@ class YapeDetail extends StatelessWidget {
         ),
         const Gap(15),
         const Divider(),
-        const DetailTile(
-          firstString: "",
-          secondString: "El que lee es Castillista",
-        ),
-        const DetailTile(
+        yapeData.message != null
+            ? DetailTile(
+                firstString: "",
+                secondString: yapeData.message!,
+              )
+            : const Gap(1),
+        DetailTile(
           firstString: "N° de celular: ",
-          secondString: "*** *** 321",
+          secondString:
+              isReceiver ? yapeData.senderPhone : yapeData.receiverPhone,
         ),
         const DetailTile(
           firstString: "Destino: ",
           secondString: "Yape",
         ),
-        const DetailTile(
+        DetailTile(
           firstString: "N° de operación: ",
-          secondString: "12345678",
+          secondString: yapeData.id.toString(),
         ),
       ],
     );
@@ -266,6 +333,7 @@ class DetailTile extends StatelessWidget {
               child: Text(
                 secondString,
                 style: const TextStyle(
+                  color: Colors.black,
                   fontSize: 15,
                 ),
               ),
@@ -336,48 +404,3 @@ class YapeDetailPainter extends CustomPainter {
   @override
   bool shouldRepaint(YapeDetailPainter oldDelegate) => false;
 }
-
-// class YapeDetailClipper extends CustomClipper<Path> {
-//   @override
-//   Path getClip(Size size) {
-//     const curvesNum = 25;
-//     final horizontalOffset = size.width / curvesNum;
-
-//     Path path = Path();
-//     path.moveTo(0, size.height - 5);
-//     //curvas de abajo
-//     var startingXCoordinate = 0.0;
-//     for (var i = 0; i < curvesNum; i++) {
-//       path.cubicTo(
-//         startingXCoordinate + horizontalOffset / 2,
-//         size.height - 10,
-//         startingXCoordinate + horizontalOffset / 2,
-//         size.height,
-//         startingXCoordinate + horizontalOffset,
-//         size.height - 5,
-//       );
-//       startingXCoordinate += horizontalOffset;
-//     }
-//     path.lineTo(size.width, 5);
-//     //curvas de arriba
-//     startingXCoordinate = size.width;
-//     for (var i = 0; i < 25; i++) {
-//       path.cubicTo(
-//         startingXCoordinate - horizontalOffset / 2,
-//         10,
-//         startingXCoordinate - horizontalOffset / 2,
-//         0,
-//         startingXCoordinate - horizontalOffset,
-//         5,
-//       );
-//       startingXCoordinate -= horizontalOffset;
-//     }
-
-//     path.close();
-
-//     return path;
-//   }
-
-//   @override
-//   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-// }
