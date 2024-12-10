@@ -21,15 +21,11 @@ Yapeo _$YapeoFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Yapeo {
   int get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'yapeo_amount')
   double get yapeoAmount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'yapeo_date')
   DateTime get yapeoDate => throw _privateConstructorUsedError;
   String get senderName => throw _privateConstructorUsedError;
   String get receiverName => throw _privateConstructorUsedError;
-  @JsonKey(name: 'sender_phone')
   String get senderPhone => throw _privateConstructorUsedError;
-  @JsonKey(name: 'receiver_phone')
   String get receiverPhone => throw _privateConstructorUsedError;
   String? get message => throw _privateConstructorUsedError;
 
@@ -49,12 +45,12 @@ abstract class $YapeoCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'yapeo_amount') double yapeoAmount,
-      @JsonKey(name: 'yapeo_date') DateTime yapeoDate,
+      double yapeoAmount,
+      DateTime yapeoDate,
       String senderName,
       String receiverName,
-      @JsonKey(name: 'sender_phone') String senderPhone,
-      @JsonKey(name: 'receiver_phone') String receiverPhone,
+      String senderPhone,
+      String receiverPhone,
       String? message});
 }
 
@@ -128,12 +124,12 @@ abstract class _$$YapeoImplCopyWith<$Res> implements $YapeoCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      @JsonKey(name: 'yapeo_amount') double yapeoAmount,
-      @JsonKey(name: 'yapeo_date') DateTime yapeoDate,
+      double yapeoAmount,
+      DateTime yapeoDate,
       String senderName,
       String receiverName,
-      @JsonKey(name: 'sender_phone') String senderPhone,
-      @JsonKey(name: 'receiver_phone') String receiverPhone,
+      String senderPhone,
+      String receiverPhone,
       String? message});
 }
 
@@ -197,16 +193,17 @@ class __$$YapeoImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$YapeoImpl extends _Yapeo {
   const _$YapeoImpl(
       {required this.id,
-      @JsonKey(name: 'yapeo_amount') required this.yapeoAmount,
-      @JsonKey(name: 'yapeo_date') required this.yapeoDate,
+      required this.yapeoAmount,
+      required this.yapeoDate,
       required this.senderName,
       required this.receiverName,
-      @JsonKey(name: 'sender_phone') required this.senderPhone,
-      @JsonKey(name: 'receiver_phone') required this.receiverPhone,
+      required this.senderPhone,
+      required this.receiverPhone,
       this.message})
       : super._();
 
@@ -216,20 +213,16 @@ class _$YapeoImpl extends _Yapeo {
   @override
   final int id;
   @override
-  @JsonKey(name: 'yapeo_amount')
   final double yapeoAmount;
   @override
-  @JsonKey(name: 'yapeo_date')
   final DateTime yapeoDate;
   @override
   final String senderName;
   @override
   final String receiverName;
   @override
-  @JsonKey(name: 'sender_phone')
   final String senderPhone;
   @override
-  @JsonKey(name: 'receiver_phone')
   final String receiverPhone;
   @override
   final String? message;
@@ -284,12 +277,12 @@ class _$YapeoImpl extends _Yapeo {
 abstract class _Yapeo extends Yapeo {
   const factory _Yapeo(
       {required final int id,
-      @JsonKey(name: 'yapeo_amount') required final double yapeoAmount,
-      @JsonKey(name: 'yapeo_date') required final DateTime yapeoDate,
+      required final double yapeoAmount,
+      required final DateTime yapeoDate,
       required final String senderName,
       required final String receiverName,
-      @JsonKey(name: 'sender_phone') required final String senderPhone,
-      @JsonKey(name: 'receiver_phone') required final String receiverPhone,
+      required final String senderPhone,
+      required final String receiverPhone,
       final String? message}) = _$YapeoImpl;
   const _Yapeo._() : super._();
 
@@ -298,20 +291,16 @@ abstract class _Yapeo extends Yapeo {
   @override
   int get id;
   @override
-  @JsonKey(name: 'yapeo_amount')
   double get yapeoAmount;
   @override
-  @JsonKey(name: 'yapeo_date')
   DateTime get yapeoDate;
   @override
   String get senderName;
   @override
   String get receiverName;
   @override
-  @JsonKey(name: 'sender_phone')
   String get senderPhone;
   @override
-  @JsonKey(name: 'receiver_phone')
   String get receiverPhone;
   @override
   String? get message;

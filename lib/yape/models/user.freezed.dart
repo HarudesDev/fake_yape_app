@@ -22,7 +22,6 @@ MyUser _$MyUserFromJson(Map<String, dynamic> json) {
 mixin _$MyUser {
   int get id => throw _privateConstructorUsedError;
   String get fullname => throw _privateConstructorUsedError;
-  @JsonKey(name: 'phone_number')
   String get phoneNumber => throw _privateConstructorUsedError;
 
   /// Serializes this MyUser to a JSON map.
@@ -39,10 +38,7 @@ abstract class $MyUserCopyWith<$Res> {
   factory $MyUserCopyWith(MyUser value, $Res Function(MyUser) then) =
       _$MyUserCopyWithImpl<$Res, MyUser>;
   @useResult
-  $Res call(
-      {int id,
-      String fullname,
-      @JsonKey(name: 'phone_number') String phoneNumber});
+  $Res call({int id, String fullname, String phoneNumber});
 }
 
 /// @nodoc
@@ -88,10 +84,7 @@ abstract class _$$MyUserImplCopyWith<$Res> implements $MyUserCopyWith<$Res> {
       __$$MyUserImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {int id,
-      String fullname,
-      @JsonKey(name: 'phone_number') String phoneNumber});
+  $Res call({int id, String fullname, String phoneNumber});
 }
 
 /// @nodoc
@@ -129,12 +122,11 @@ class __$$MyUserImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(fieldRename: FieldRename.snake)
 class _$MyUserImpl extends _MyUser {
   const _$MyUserImpl(
-      {required this.id,
-      required this.fullname,
-      @JsonKey(name: 'phone_number') required this.phoneNumber})
+      {required this.id, required this.fullname, required this.phoneNumber})
       : super._();
 
   factory _$MyUserImpl.fromJson(Map<String, dynamic> json) =>
@@ -145,7 +137,6 @@ class _$MyUserImpl extends _MyUser {
   @override
   final String fullname;
   @override
-  @JsonKey(name: 'phone_number')
   final String phoneNumber;
 
   @override
@@ -187,10 +178,9 @@ class _$MyUserImpl extends _MyUser {
 
 abstract class _MyUser extends MyUser {
   const factory _MyUser(
-          {required final int id,
-          required final String fullname,
-          @JsonKey(name: 'phone_number') required final String phoneNumber}) =
-      _$MyUserImpl;
+      {required final int id,
+      required final String fullname,
+      required final String phoneNumber}) = _$MyUserImpl;
   const _MyUser._() : super._();
 
   factory _MyUser.fromJson(Map<String, dynamic> json) = _$MyUserImpl.fromJson;
@@ -200,7 +190,6 @@ abstract class _MyUser extends MyUser {
   @override
   String get fullname;
   @override
-  @JsonKey(name: 'phone_number')
   String get phoneNumber;
 
   /// Create a copy of MyUser

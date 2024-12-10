@@ -63,10 +63,13 @@ class TransactionsList extends ConsumerWidget {
               ),
               Row(
                 children: [
-                  const Icon(
-                    Icons.refresh,
-                    color: secondaryColor,
-                    size: 24,
+                  IconButton(
+                    icon: const Icon(
+                      Icons.refresh,
+                      color: secondaryColor,
+                      size: 24,
+                    ),
+                    onPressed: () => ref.invalidate(userLastYapeosProvider),
                   ),
                   //const VerticalDivider(),
                   OutlinedButton(
@@ -109,7 +112,8 @@ class TransactionsList extends ConsumerWidget {
                   ],
                 );
               },
-              error: (error, stack) => Text(error.toString()),
+              error: (error, stack) =>
+                  Text("${error.toString()} \n ${stack.toString()}"),
               loading: () => const CircularProgressIndicator()),
         ],
       ),

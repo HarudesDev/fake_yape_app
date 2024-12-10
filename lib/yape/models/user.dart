@@ -9,10 +9,11 @@ part 'user.g.dart';
 class MyUser with _$MyUser {
   const MyUser._();
 
+  @JsonSerializable(fieldRename: FieldRename.snake)
   const factory MyUser({
     required int id,
     required String fullname,
-    @JsonKey(name: 'phone_number') required String phoneNumber,
+    required String phoneNumber,
   }) = _MyUser;
 
   factory MyUser.fromJson(Map<String, Object?> json) => _$MyUserFromJson(json);

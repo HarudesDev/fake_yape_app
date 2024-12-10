@@ -13,20 +13,21 @@ class SupabaseDatabaseRepository {
   Future<List<Yapeo>> getLastYapeos(int userId) async {
     final query = await _supabase
         .from('yapeos')
-        .select('id, yapeo_amount, yapeo_date, '
+        .select('id, yapeo_amount, yapeo_date, message,'
             'sender:sender_id(fullname, phone_number),'
             ' receiver:receiver_id(fullname, phone_number)')
         .or('receiver_id.eq.${userId.toString()}, sender_id.eq.${userId.toString()}')
         .order('yapeo_date')
         .limit(7);
     return query.map((yapeo) {
-      return Yapeo.fromJson({
+      final formattedYapeo = {
         ...yapeo,
+        'sender_name': yapeo['sender']['fullname'],
+        'receiver_name': yapeo['receiver']['fullname'],
         'sender_phone': yapeo['sender']['phone_number'],
         'receiver_phone': yapeo['receiver']['phone_number'],
-        'sender': yapeo['sender']['fullname'],
-        'receiver': yapeo['receiver']['fullname'],
-      });
+      };
+      return Yapeo.fromJson(formattedYapeo);
     }).toList();
   }
 
@@ -41,10 +42,10 @@ class SupabaseDatabaseRepository {
     return query.isNotEmpty
         ? Yapeo.fromJson({
             ...yapeo,
+            'sender_name': yapeo['sender']['fullname'],
+            'receiver_name': yapeo['receiver']['fullname'],
             'sender_phone': yapeo['sender']['phone_number'],
             'receiver_phone': yapeo['receiver']['phone_number'],
-            'sender': yapeo['sender']['fullname'],
-            'receiver': yapeo['receiver']['fullname'],
           })
         : null;
   }

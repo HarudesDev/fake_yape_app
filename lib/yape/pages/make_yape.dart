@@ -169,6 +169,8 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                                               _yapeoAmount,
                                               _message);
                                       if (yapeoData != null) {
+                                        // ignore: unused_result
+                                        ref.refresh(userLastYapeosProvider);
                                         if (context.mounted) {
                                           AutoRouter.of(context).replaceAll([
                                             YapeDetailRoute(
