@@ -89,23 +89,28 @@ class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
                 _filterString.length != 9
                     ? Expanded(
                         child: ListView.builder(
-                          itemBuilder: (context, index) => Column(
-                            children: [
-                              ListTile(
-                                onTap: () {
-                                  AutoRouter.of(context)
-                                      .push(const MakeYapeRoute());
-                                },
-                                title: Text(filteredContacts[index].name.first),
-                                subtitle: Text(formatNormalizedNumber(
-                                    filteredContacts[index].phones[0])),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                                child: Divider(),
-                              ),
-                            ],
-                          ),
+                          itemBuilder: (context, index) {
+                            final contact = filteredContacts[index];
+                            return Column(
+                              children: [
+                                ListTile(
+                                  onTap: () {
+                                    AutoRouter.of(context)
+                                        .push(MakeYapeRoute(contact: contact));
+                                  },
+                                  title:
+                                      Text(filteredContacts[index].displayName),
+                                  subtitle: Text(formatNormalizedNumber(
+                                      contact.phones[0])),
+                                ),
+                                const Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 15.0),
+                                  child: Divider(),
+                                ),
+                              ],
+                            );
+                          },
                           itemCount: filteredContacts.length,
                         ),
                       )

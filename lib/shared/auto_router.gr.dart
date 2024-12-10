@@ -19,6 +19,7 @@ import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i11;
 import 'package:fake_yape_app/home/pages/home_page/home.dart' as _i1;
 import 'package:fake_yape_app/home/pages/menu_page/menu.dart' as _i4;
 import 'package:fake_yape_app/home/pages/transactions.dart' as _i9;
+import 'package:fake_yape_app/yape/models/yapeo.dart' as _i17;
 import 'package:fake_yape_app/yape/pages/make_yape.dart' as _i3;
 import 'package:fake_yape_app/yape/pages/qr_reader.dart' as _i5;
 import 'package:fake_yape_app/yape/pages/yape_detail.dart' as _i12;
@@ -66,10 +67,17 @@ class LoginRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.MakeYapePage]
-class MakeYapeRoute extends _i14.PageRouteInfo<void> {
-  const MakeYapeRoute({List<_i14.PageRouteInfo>? children})
-      : super(
+class MakeYapeRoute extends _i14.PageRouteInfo<MakeYapeRouteArgs> {
+  MakeYapeRoute({
+    _i15.Key? key,
+    required _i16.Contact contact,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           MakeYapeRoute.name,
+          args: MakeYapeRouteArgs(
+            key: key,
+            contact: contact,
+          ),
           initialChildren: children,
         );
 
@@ -78,9 +86,29 @@ class MakeYapeRoute extends _i14.PageRouteInfo<void> {
   static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i3.MakeYapePage();
+      final args = data.argsAs<MakeYapeRouteArgs>();
+      return _i3.MakeYapePage(
+        key: args.key,
+        contact: args.contact,
+      );
     },
   );
+}
+
+class MakeYapeRouteArgs {
+  const MakeYapeRouteArgs({
+    this.key,
+    required this.contact,
+  });
+
+  final _i15.Key? key;
+
+  final _i16.Contact contact;
+
+  @override
+  String toString() {
+    return 'MakeYapeRouteArgs{key: $key, contact: $contact}';
+  }
 }
 
 /// generated route for
@@ -313,10 +341,19 @@ class Wrapper extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.YapeDetailPage]
-class YapeDetailRoute extends _i14.PageRouteInfo<void> {
-  const YapeDetailRoute({List<_i14.PageRouteInfo>? children})
-      : super(
+class YapeDetailRoute extends _i14.PageRouteInfo<YapeDetailRouteArgs> {
+  YapeDetailRoute({
+    _i15.Key? key,
+    required _i17.Yapeo yapeData,
+    required bool isReceiver,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           YapeDetailRoute.name,
+          args: YapeDetailRouteArgs(
+            key: key,
+            yapeData: yapeData,
+            isReceiver: isReceiver,
+          ),
           initialChildren: children,
         );
 
@@ -325,9 +362,33 @@ class YapeDetailRoute extends _i14.PageRouteInfo<void> {
   static _i14.PageInfo page = _i14.PageInfo(
     name,
     builder: (data) {
-      return const _i12.YapeDetailPage();
+      final args = data.argsAs<YapeDetailRouteArgs>();
+      return _i12.YapeDetailPage(
+        key: args.key,
+        yapeData: args.yapeData,
+        isReceiver: args.isReceiver,
+      );
     },
   );
+}
+
+class YapeDetailRouteArgs {
+  const YapeDetailRouteArgs({
+    this.key,
+    required this.yapeData,
+    required this.isReceiver,
+  });
+
+  final _i15.Key? key;
+
+  final _i17.Yapeo yapeData;
+
+  final bool isReceiver;
+
+  @override
+  String toString() {
+    return 'YapeDetailRouteArgs{key: $key, yapeData: $yapeData, isReceiver: $isReceiver}';
+  }
 }
 
 /// generated route for

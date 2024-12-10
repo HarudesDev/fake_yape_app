@@ -3,6 +3,7 @@ import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/shared/style.dart';
+import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
@@ -89,23 +90,25 @@ class TransactionsList extends ConsumerWidget {
           const Gap(10),
           const Divider(),
           transactionList.when(
-              data: (transactions) => Column(
-                    children: [
-                      ...transactions.map((transaction) {
-                        final isReceiver = user!.userMetadata!['fullName'] ==
-                            transaction['to']['fullname'];
-                        return Column(
-                          children: [
-                            TransactionTile(
-                              transaction: transaction,
-                              isReceiver: isReceiver,
-                            ),
-                            const Divider(),
-                          ],
-                        );
-                      }),
-                    ],
-                  ),
+              data: (transactions) {
+                return Column(
+                  children: [
+                    ...transactions.map((transaction) {
+                      final isReceiver = user!.userMetadata!['fullName'] ==
+                          transaction.receiverName;
+                      return Column(
+                        children: [
+                          TransactionTile(
+                            transaction: transaction,
+                            isReceiver: isReceiver,
+                          ),
+                          const Divider(),
+                        ],
+                      );
+                    }),
+                  ],
+                );
+              },
               error: (error, stack) => Text(error.toString()),
               loading: () => const CircularProgressIndicator()),
         ],
@@ -115,7 +118,7 @@ class TransactionsList extends ConsumerWidget {
 }
 
 class TransactionTile extends StatelessWidget {
-  final Map<String, dynamic> transaction;
+  final Yapeo transaction;
   final bool isReceiver;
 
   const TransactionTile(
@@ -133,9 +136,7 @@ class TransactionTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isReceiver
-                    ? transaction['from']['fullname'].toString()
-                    : transaction['to']['fullname'].toString(),
+                isReceiver ? transaction.senderName : transaction.receiverName,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
@@ -143,7 +144,7 @@ class TransactionTile extends StatelessWidget {
               ),
               const Gap(10),
               Text(
-                transaction['yapeo_date'].toString(),
+                transaction.yapeoDate.toString(),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -152,7 +153,7 @@ class TransactionTile extends StatelessWidget {
             ],
           ),
           Text(
-            '${isReceiver ? '' : '-'} S/ ${transaction['yapeo_amount'].toString()}',
+            '${isReceiver ? '' : '-'} S/ ${transaction.yapeoAmount.toString()}',
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 18,
