@@ -6,7 +6,8 @@ part of 'yapeos_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$userByPhoneHash() => r'86d0d74140cf0d06d511eda4e8bf753dd48003b7';
+String _$userLastYapeosFromDateHash() =>
+    r'119ee436f6e933311860ec8a95f20d4c33e3ba74';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -28,6 +29,144 @@ class _SystemHash {
     return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
   }
 }
+
+/// See also [userLastYapeosFromDate].
+@ProviderFor(userLastYapeosFromDate)
+const userLastYapeosFromDateProvider = UserLastYapeosFromDateFamily();
+
+/// See also [userLastYapeosFromDate].
+class UserLastYapeosFromDateFamily
+    extends Family<AsyncValue<List<Map<String, dynamic>>>> {
+  /// See also [userLastYapeosFromDate].
+  const UserLastYapeosFromDateFamily();
+
+  /// See also [userLastYapeosFromDate].
+  UserLastYapeosFromDateProvider call(
+    DateTime startDate,
+  ) {
+    return UserLastYapeosFromDateProvider(
+      startDate,
+    );
+  }
+
+  @override
+  UserLastYapeosFromDateProvider getProviderOverride(
+    covariant UserLastYapeosFromDateProvider provider,
+  ) {
+    return call(
+      provider.startDate,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userLastYapeosFromDateProvider';
+}
+
+/// See also [userLastYapeosFromDate].
+class UserLastYapeosFromDateProvider
+    extends AutoDisposeFutureProvider<List<Map<String, dynamic>>> {
+  /// See also [userLastYapeosFromDate].
+  UserLastYapeosFromDateProvider(
+    DateTime startDate,
+  ) : this._internal(
+          (ref) => userLastYapeosFromDate(
+            ref as UserLastYapeosFromDateRef,
+            startDate,
+          ),
+          from: userLastYapeosFromDateProvider,
+          name: r'userLastYapeosFromDateProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userLastYapeosFromDateHash,
+          dependencies: UserLastYapeosFromDateFamily._dependencies,
+          allTransitiveDependencies:
+              UserLastYapeosFromDateFamily._allTransitiveDependencies,
+          startDate: startDate,
+        );
+
+  UserLastYapeosFromDateProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.startDate,
+  }) : super.internal();
+
+  final DateTime startDate;
+
+  @override
+  Override overrideWith(
+    FutureOr<List<Map<String, dynamic>>> Function(
+            UserLastYapeosFromDateRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserLastYapeosFromDateProvider._internal(
+        (ref) => create(ref as UserLastYapeosFromDateRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        startDate: startDate,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<List<Map<String, dynamic>>> createElement() {
+    return _UserLastYapeosFromDateProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserLastYapeosFromDateProvider &&
+        other.startDate == startDate;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, startDate.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin UserLastYapeosFromDateRef
+    on AutoDisposeFutureProviderRef<List<Map<String, dynamic>>> {
+  /// The parameter `startDate` of this provider.
+  DateTime get startDate;
+}
+
+class _UserLastYapeosFromDateProviderElement
+    extends AutoDisposeFutureProviderElement<List<Map<String, dynamic>>>
+    with UserLastYapeosFromDateRef {
+  _UserLastYapeosFromDateProviderElement(super.provider);
+
+  @override
+  DateTime get startDate =>
+      (origin as UserLastYapeosFromDateProvider).startDate;
+}
+
+String _$userByPhoneHash() => r'86d0d74140cf0d06d511eda4e8bf753dd48003b7';
 
 /// See also [userByPhone].
 @ProviderFor(userByPhone)

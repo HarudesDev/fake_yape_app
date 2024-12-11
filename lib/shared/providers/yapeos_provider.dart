@@ -16,6 +16,16 @@ final userLastYapeosProvider = FutureProvider<List<Yapeo>>((ref) async {
 });
 
 @riverpod
+Future<List<Map<String, dynamic>>> userLastYapeosFromDate(
+    Ref ref, DateTime startDate) async {
+  final supabaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
+  final auth = ref.read(supabaseAuthRepositoryProvider);
+  final user = await supabaseRepository.getUserByAuthId(auth.getUser!.id);
+  final userId = user!.id;
+  return supabaseRepository.getLastYapeosFromDate(userId, startDate);
+}
+
+@riverpod
 Future<MyUser?> userByPhone(Ref ref, String phoneNumber) {
   final supabaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
   return supabaseRepository.getUserByPhone(phoneNumber);

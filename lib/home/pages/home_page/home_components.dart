@@ -7,6 +7,7 @@ import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 class TransactionsList extends ConsumerWidget {
   const TransactionsList({
@@ -15,7 +16,7 @@ class TransactionsList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final transactionList = ref.watch(userLastYapeosProvider);
+    final yapeoList = ref.watch(userLastYapeosProvider);
     final user = ref.read(supabaseAuthRepositoryProvider).getUser;
     return Container(
       padding: const EdgeInsets.all(20),
@@ -69,7 +70,9 @@ class TransactionsList extends ConsumerWidget {
                       color: secondaryColor,
                       size: 24,
                     ),
-                    onPressed: () => ref.invalidate(userLastYapeosProvider),
+                    onPressed: () {
+                      ref.invalidate(userLastYapeosProvider);
+                    },
                   ),
                   //const VerticalDivider(),
                   OutlinedButton(
@@ -92,17 +95,17 @@ class TransactionsList extends ConsumerWidget {
           ),
           const Gap(10),
           const Divider(),
-          transactionList.when(
-              data: (transactions) {
+          yapeoList.when(
+              data: (yapeos) {
                 return Column(
                   children: [
-                    ...transactions.map((transaction) {
-                      final isReceiver = user!.userMetadata!['fullName'] ==
-                          transaction.receiverName;
+                    ...yapeos.map((yapeo) {
+                      final isReceiver =
+                          user!.userMetadata!['fullName'] == yapeo.receiverName;
                       return Column(
                         children: [
                           TransactionTile(
-                            transaction: transaction,
+                            yapeo: yapeo,
                             isReceiver: isReceiver,
                           ),
                           const Divider(),
@@ -122,11 +125,25 @@ class TransactionsList extends ConsumerWidget {
 }
 
 class TransactionTile extends StatelessWidget {
-  final Yapeo transaction;
+  final Yapeo yapeo;
   final bool isReceiver;
 
-  const TransactionTile(
-      {super.key, required this.transaction, required this.isReceiver});
+  const TransactionTile({
+    super.key,
+    required this.yapeo,
+    required this.isReceiver,
+  });
+
+  bool _isToday(DateTime date) {
+    return date.isAfter(DateTime.now().copyWith(hour: 0, minute: 0, second: 0));
+  }
+
+  bool _isYesterday(DateTime date) {
+    return date.isAfter(DateTime.now()
+            .subtract(const Duration(days: 1))
+            .copyWith(hour: 0, minute: 0, second: 0)) &&
+        date.isBefore(DateTime.now().copyWith(hour: 0, minute: 0, second: 0));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +157,7 @@ class TransactionTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                isReceiver ? transaction.senderName : transaction.receiverName,
+                isReceiver ? yapeo.senderName : yapeo.receiverName,
                 style: const TextStyle(
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
@@ -148,7 +165,13 @@ class TransactionTile extends StatelessWidget {
               ),
               const Gap(10),
               Text(
-                transaction.yapeoDate.toString(),
+                _isToday(yapeo.yapeoDate)
+                    ? "Hoy ${DateFormat.jm().format(yapeo.yapeoDate)}"
+                    : _isYesterday(yapeo.yapeoDate)
+                        ? "Ayer ${DateFormat.jm().format(yapeo.yapeoDate)}"
+                        : DateFormat('d MMM. yyyy - ')
+                            .add_jm()
+                            .format(yapeo.yapeoDate),
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 16,
@@ -157,57 +180,12 @@ class TransactionTile extends StatelessWidget {
             ],
           ),
           Text(
-            '${isReceiver ? '' : '-'} S/ ${transaction.yapeoAmount.toString()}',
+            '${isReceiver ? '' : '-'} S/ '
+            '${yapeo.yapeoAmount.toString()}',
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 18,
               color: isReceiver ? Colors.black : Colors.red,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class TransferredTransactionTile extends StatelessWidget {
-  final Map<String, dynamic> transaction;
-
-  const TransferredTransactionTile({super.key, required this.transaction});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                transaction['to']['fullname'].toString(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
-                ),
-              ),
-              const Gap(10),
-              Text(
-                transaction['yapeo_date'].toString(),
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
-                ),
-              ),
-            ],
-          ),
-          Text(
-            transaction['yapeo_amount'].toString(),
-            style: const TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
             ),
           ),
         ],

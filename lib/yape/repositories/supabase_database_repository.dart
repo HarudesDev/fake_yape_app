@@ -4,11 +4,49 @@ import 'package:fake_yape_app/yape/models/user.dart';
 import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:intl/intl.dart';
 
 class SupabaseDatabaseRepository {
   final SupabaseClient _supabase;
 
   SupabaseDatabaseRepository(this._supabase);
+
+  Future<List<Map<String, dynamic>>> getLastYapeosFromDate(
+      int userId, DateTime startDate) async {
+    final query = await _supabase
+        .from('yapeos')
+        .select('id, yapeo_amount, yapeo_date, message,'
+            'sender:sender_id(fullname, phone_number),'
+            ' receiver:receiver_id(fullname, phone_number)')
+        .or('receiver_id.eq.${userId.toString()}, sender_id.eq.${userId.toString()}')
+        .gte('yapeo_date', startDate)
+        .order('yapeo_date');
+    final yapeos = query.map((yapeo) {
+      final formattedYapeo = {
+        ...yapeo,
+        'sender_name': yapeo['sender']['fullname'],
+        'receiver_name': yapeo['receiver']['fullname'],
+        'sender_phone': yapeo['sender']['phone_number'],
+        'receiver_phone': yapeo['receiver']['phone_number'],
+      };
+      return Yapeo.fromJson(formattedYapeo);
+    }).toList();
+    List<Map<String, dynamic>> yapeosByMonth = [];
+    for (var yapeo in yapeos) {
+      final yapeoMonth = DateFormat.MMMM().format(yapeo.yapeoDate);
+      final monthIndex =
+          yapeosByMonth.indexWhere((element) => element['month'] == yapeoMonth);
+      if (monthIndex >= 0) {
+        yapeosByMonth[monthIndex]['yapeos'].add(yapeo);
+      } else {
+        yapeosByMonth.add({
+          'month': yapeoMonth,
+          'yapeos': [yapeo],
+        });
+      }
+    }
+    return yapeosByMonth;
+  }
 
   Future<List<Yapeo>> getLastYapeos(int userId) async {
     final query = await _supabase
