@@ -18,7 +18,8 @@ import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart' as _i10;
 import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i11;
 import 'package:fake_yape_app/home/pages/home_page/home.dart' as _i1;
 import 'package:fake_yape_app/home/pages/menu_page/menu.dart' as _i4;
-import 'package:fake_yape_app/home/pages/transactions.dart' as _i9;
+import 'package:fake_yape_app/home/pages/transactions_page/transactions.dart'
+    as _i9;
 import 'package:fake_yape_app/yape/models/yapeo.dart' as _i17;
 import 'package:fake_yape_app/yape/pages/make_yape.dart' as _i3;
 import 'package:fake_yape_app/yape/pages/qr_reader.dart' as _i5;
