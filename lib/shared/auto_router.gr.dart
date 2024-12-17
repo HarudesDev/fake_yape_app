@@ -9,24 +9,30 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i15;
-import 'package:fake_yape_app/auth/pages/login_page/login.dart' as _i2;
-import 'package:fake_yape_app/auth/pages/register_data_page/register_data.dart'
+import 'package:fake_yape_app/auth/pages/login_page/login_page.dart' as _i2;
+import 'package:fake_yape_app/auth/pages/register_data_page/register_data_page.dart'
     as _i7;
-import 'package:fake_yape_app/auth/pages/register_page/register.dart' as _i8;
-import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard.dart'
+import 'package:fake_yape_app/auth/pages/register_page/register_page.dart'
+    as _i8;
+import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_page.dart'
     as _i9;
-import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart' as _i11;
+import 'package:fake_yape_app/auth/pages/welcome_page/welcome_page.dart'
+    as _i11;
 import 'package:fake_yape_app/auth/pages/wrapper.dart' as _i12;
-import 'package:fake_yape_app/home/pages/home_page/home.dart' as _i1;
-import 'package:fake_yape_app/home/pages/menu_page/menu.dart' as _i5;
+import 'package:fake_yape_app/home/pages/home_page/home_page.dart' as _i1;
 import 'package:fake_yape_app/home/pages/menu_page/menu_my_qr.dart' as _i4;
-import 'package:fake_yape_app/home/pages/transactions_page/transactions.dart'
+import 'package:fake_yape_app/home/pages/menu_page/menu_page.dart' as _i5;
+import 'package:fake_yape_app/home/pages/transactions_page/transactions_page.dart'
     as _i10;
 import 'package:fake_yape_app/yape/models/yapeo.dart' as _i18;
-import 'package:fake_yape_app/yape/pages/make_yape.dart' as _i3;
-import 'package:fake_yape_app/yape/pages/qr_reader_page/qr_reader.dart' as _i6;
-import 'package:fake_yape_app/yape/pages/yape_detail.dart' as _i13;
-import 'package:fake_yape_app/yape/pages/yape_directory.dart' as _i14;
+import 'package:fake_yape_app/yape/pages/make_yape_page/make_yape_page.dart'
+    as _i3;
+import 'package:fake_yape_app/yape/pages/qr_reader_page/qr_reader_page.dart'
+    as _i6;
+import 'package:fake_yape_app/yape/pages/yape_detail_page/yape_detail_page.dart'
+    as _i13;
+import 'package:fake_yape_app/yape/pages/yape_directory_page/yape_directory_page.dart'
+    as _i14;
 import 'package:flutter/material.dart' as _i16;
 import 'package:flutter_contacts/flutter_contacts.dart' as _i17;
 

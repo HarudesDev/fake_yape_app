@@ -1,9 +1,10 @@
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:flutter/material.dart';
 
-import 'package:fake_yape_app/shared/style.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+
+import 'yape_directory_components.dart';
 
 @RoutePage()
 class YapeDirectoryPage extends StatefulWidget {
@@ -144,27 +145,4 @@ class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
       "${contactPhone.normalizedNumber.substring(3, 6)} "
       "${contactPhone.normalizedNumber.substring(6, 9)} "
       "${contactPhone.normalizedNumber.substring(9)}";
-}
-
-class MakeYapeTab extends StatelessWidget {
-  const MakeYapeTab({super.key, required this.tabText});
-
-  final String tabText;
-
-  @override
-  Widget build(BuildContext context) {
-    return Tab(
-      child: SizedBox(
-        width: double.infinity,
-        child: Center(
-          child: Text(
-            tabText,
-            style: const TextStyle(
-              color: mainColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }

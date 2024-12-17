@@ -1,6 +1,6 @@
-import 'package:fake_yape_app/auth/pages/welcome_page/welcome.dart';
+import 'package:fake_yape_app/auth/pages/welcome_page/welcome_page.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
-import 'package:fake_yape_app/home/pages/home_page/home.dart';
+import 'package:fake_yape_app/home/pages/home_page/home_page.dart';
 import 'package:fake_yape_app/shared/providers/auth_provider.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/yape/repositories/supabase_database_repository.dart';

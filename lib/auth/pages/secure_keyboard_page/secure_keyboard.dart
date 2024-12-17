@@ -1,79 +1,13 @@
 import 'dart:developer';
 
+import 'package:auto_route/auto_route.dart';
+import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_components.dart';
+import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_page.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_route/auto_route.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-
-enum SecureKeyboardPageType {
-  loginPage,
-  passwordPage,
-  passwordConfirmPage,
-}
-
-@RoutePage()
-class SecureKeyboardPage extends StatelessWidget {
-  const SecureKeyboardPage(
-      {super.key, required this.parameters, required this.pageType});
-
-  final Map<String, dynamic> parameters;
-  final SecureKeyboardPageType pageType;
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: mainColor,
-      appBar: AppBar(
-        iconTheme: const IconThemeData(color: Colors.white),
-        backgroundColor: mainColor,
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Gap(10),
-            Column(
-              children: [
-                Image.asset(
-                  'assets/images/secure_keyboard.png',
-                  width: 80,
-                ),
-                const Gap(10),
-                Text(
-                  pageType == SecureKeyboardPageType.loginPage
-                      ? "Ingresa tu clave Yape"
-                      : pageType == SecureKeyboardPageType.passwordPage
-                          ? "Crea tu clave Yape"
-                          : "Confirma tu clave Yape",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const Gap(10),
-                const Text(
-                  "Clave de 6 dígitos",
-                  style: TextStyle(
-                    color: Colors.white54,
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-            SecureKeyboard(
-              parameters: parameters,
-              pageType: pageType,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
 class SecureKeyboard extends StatefulWidget {
   const SecureKeyboard(
@@ -322,42 +256,6 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class SecureKeyboardKey extends StatelessWidget {
-  const SecureKeyboardKey({
-    super.key,
-    required this.keyNumber,
-    required this.onPress,
-  });
-  final String keyNumber;
-  final Function() onPress;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.all(6.0),
-        child: SizedBox(
-          height: 55,
-          child: ElevatedButton(
-            onPressed: onPress,
-            style: ButtonStyle(
-              shape: getRoundedRectangleBorder(10),
-              backgroundColor: const WidgetStatePropertyAll(mainColorLight),
-            ),
-            child: Text(
-              keyNumber,
-              style: const TextStyle(
-                fontSize: 30,
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
