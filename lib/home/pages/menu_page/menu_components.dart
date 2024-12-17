@@ -226,7 +226,7 @@ class MenuButton extends StatelessWidget {
     required this.buttonText,
   });
 
-  final Function onPressed;
+  final Function() onPressed;
   final IconData buttonIcon;
   final String buttonText;
 
@@ -235,7 +235,7 @@ class MenuButton extends StatelessWidget {
     return Column(
       children: [
         IconButton(
-          onPressed: () => onPressed,
+          onPressed: () => onPressed(),
           icon: Icon(
             buttonIcon,
             color: Colors.white,

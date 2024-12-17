@@ -38,7 +38,7 @@
       "source.fixAll": "always"
     },
     "editor.rulers": [
-      80
+      90
     ],
   },
   "editor.formatOnSave": true,

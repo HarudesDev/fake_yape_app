@@ -30,3 +30,9 @@ Future<MyUser?> userByPhone(Ref ref, String phoneNumber) {
   final supabaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
   return supabaseRepository.getUserByPhone(phoneNumber);
 }
+
+@riverpod
+Future<MyUser?> userByAuthId(Ref ref, String authId) {
+  final supabaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
+  return supabaseRepository.getUserByAuthId(authId);
+}

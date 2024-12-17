@@ -295,5 +295,135 @@ class _UserByPhoneProviderElement
   @override
   String get phoneNumber => (origin as UserByPhoneProvider).phoneNumber;
 }
+
+String _$userByAuthIdHash() => r'278a299ec38c28cef32370bfb87767f7e42c621a';
+
+/// See also [userByAuthId].
+@ProviderFor(userByAuthId)
+const userByAuthIdProvider = UserByAuthIdFamily();
+
+/// See also [userByAuthId].
+class UserByAuthIdFamily extends Family<AsyncValue<MyUser?>> {
+  /// See also [userByAuthId].
+  const UserByAuthIdFamily();
+
+  /// See also [userByAuthId].
+  UserByAuthIdProvider call(
+    String authId,
+  ) {
+    return UserByAuthIdProvider(
+      authId,
+    );
+  }
+
+  @override
+  UserByAuthIdProvider getProviderOverride(
+    covariant UserByAuthIdProvider provider,
+  ) {
+    return call(
+      provider.authId,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'userByAuthIdProvider';
+}
+
+/// See also [userByAuthId].
+class UserByAuthIdProvider extends AutoDisposeFutureProvider<MyUser?> {
+  /// See also [userByAuthId].
+  UserByAuthIdProvider(
+    String authId,
+  ) : this._internal(
+          (ref) => userByAuthId(
+            ref as UserByAuthIdRef,
+            authId,
+          ),
+          from: userByAuthIdProvider,
+          name: r'userByAuthIdProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$userByAuthIdHash,
+          dependencies: UserByAuthIdFamily._dependencies,
+          allTransitiveDependencies:
+              UserByAuthIdFamily._allTransitiveDependencies,
+          authId: authId,
+        );
+
+  UserByAuthIdProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.authId,
+  }) : super.internal();
+
+  final String authId;
+
+  @override
+  Override overrideWith(
+    FutureOr<MyUser?> Function(UserByAuthIdRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: UserByAuthIdProvider._internal(
+        (ref) => create(ref as UserByAuthIdRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        authId: authId,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<MyUser?> createElement() {
+    return _UserByAuthIdProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is UserByAuthIdProvider && other.authId == authId;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, authId.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+@Deprecated('Will be removed in 3.0. Use Ref instead')
+// ignore: unused_element
+mixin UserByAuthIdRef on AutoDisposeFutureProviderRef<MyUser?> {
+  /// The parameter `authId` of this provider.
+  String get authId;
+}
+
+class _UserByAuthIdProviderElement
+    extends AutoDisposeFutureProviderElement<MyUser?> with UserByAuthIdRef {
+  _UserByAuthIdProviderElement(super.provider);
+
+  @override
+  String get authId => (origin as UserByAuthIdProvider).authId;
+}
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
