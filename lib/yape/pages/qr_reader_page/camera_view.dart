@@ -14,11 +14,9 @@ class CameraView extends StatefulWidget {
   const CameraView({
     super.key,
     required this.onImage,
-    this.onCameraLensDirectionChanged,
   });
 
   final Function(InputImage inputImage) onImage;
-  final Function(CameraLensDirection direction)? onCameraLensDirectionChanged;
 
   @override
   State<CameraView> createState() => _CameraViewState();
@@ -66,15 +64,12 @@ class _CameraViewState extends State<CameraView> {
           : ImageFormatGroup.bgra8888,
     );
     //TODO puede fallar
-    _controller?.initialize().then((_) {
+    _controller?.initialize().then((_) async {
       if (!mounted) {
         return;
       }
-      _controller?.startImageStream(_processCameraImage).then((value) {
-        if (widget.onCameraLensDirectionChanged != null) {
-          widget.onCameraLensDirectionChanged!(camera.lensDirection);
-        }
-      });
+      _controller?.startImageStream(_processCameraImage);
+      await _controller?.lockCaptureOrientation();
       setState(() {});
     });
   }

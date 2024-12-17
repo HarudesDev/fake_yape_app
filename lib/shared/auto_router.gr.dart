@@ -24,7 +24,7 @@ import 'package:fake_yape_app/home/pages/menu_page/menu_my_qr.dart' as _i4;
 import 'package:fake_yape_app/home/pages/menu_page/menu_page.dart' as _i5;
 import 'package:fake_yape_app/home/pages/transactions_page/transactions_page.dart'
     as _i10;
-import 'package:fake_yape_app/yape/models/yapeo.dart' as _i18;
+import 'package:fake_yape_app/yape/models/yapeo.dart' as _i19;
 import 'package:fake_yape_app/yape/pages/make_yape_page/make_yape_page.dart'
     as _i3;
 import 'package:fake_yape_app/yape/pages/qr_reader_page/qr_reader_page.dart'
@@ -33,6 +33,7 @@ import 'package:fake_yape_app/yape/pages/yape_detail_page/yape_detail_page.dart'
     as _i13;
 import 'package:fake_yape_app/yape/pages/yape_directory_page/yape_directory_page.dart'
     as _i14;
+import 'package:fake_yape_app/yape/services/yape_service.dart' as _i18;
 import 'package:flutter/material.dart' as _i16;
 import 'package:flutter_contacts/flutter_contacts.dart' as _i17;
 
@@ -176,10 +177,17 @@ class MenuRouteArgs {
 
 /// generated route for
 /// [_i6.QrReaderPage]
-class QrReaderRoute extends _i15.PageRouteInfo<void> {
-  const QrReaderRoute({List<_i15.PageRouteInfo>? children})
-      : super(
+class QrReaderRoute extends _i15.PageRouteInfo<QrReaderRouteArgs> {
+  QrReaderRoute({
+    _i16.Key? key,
+    required _i18.YapeService yapeService,
+    List<_i15.PageRouteInfo>? children,
+  }) : super(
           QrReaderRoute.name,
+          args: QrReaderRouteArgs(
+            key: key,
+            yapeService: yapeService,
+          ),
           initialChildren: children,
         );
 
@@ -188,9 +196,29 @@ class QrReaderRoute extends _i15.PageRouteInfo<void> {
   static _i15.PageInfo page = _i15.PageInfo(
     name,
     builder: (data) {
-      return const _i6.QrReaderPage();
+      final args = data.argsAs<QrReaderRouteArgs>();
+      return _i6.QrReaderPage(
+        key: args.key,
+        yapeService: args.yapeService,
+      );
     },
   );
+}
+
+class QrReaderRouteArgs {
+  const QrReaderRouteArgs({
+    this.key,
+    required this.yapeService,
+  });
+
+  final _i16.Key? key;
+
+  final _i18.YapeService yapeService;
+
+  @override
+  String toString() {
+    return 'QrReaderRouteArgs{key: $key, yapeService: $yapeService}';
+  }
 }
 
 /// generated route for
@@ -372,7 +400,7 @@ class Wrapper extends _i15.PageRouteInfo<void> {
 class YapeDetailRoute extends _i15.PageRouteInfo<YapeDetailRouteArgs> {
   YapeDetailRoute({
     _i16.Key? key,
-    required _i18.Yapeo yapeData,
+    required _i19.Yapeo yapeData,
     required bool isReceiver,
     List<_i15.PageRouteInfo>? children,
   }) : super(
@@ -409,7 +437,7 @@ class YapeDetailRouteArgs {
 
   final _i16.Key? key;
 
-  final _i18.Yapeo yapeData;
+  final _i19.Yapeo yapeData;
 
   final bool isReceiver;
 

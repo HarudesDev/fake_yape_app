@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
-import 'package:fake_yape_app/shared/services/directory_service.dart';
+import 'package:fake_yape_app/yape/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -19,7 +19,7 @@ class HomePage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     //final future = Supabase.instance.client.from('countries').select();
-    final directoryService = ref.read(directoryServiceProvider);
+    final yapeService = ref.read(yapeServiceProvider);
 
     return SafeArea(
       child: Container(
@@ -138,7 +138,8 @@ class HomePage extends ConsumerWidget {
                   SizedBox(
                     child: OutlinedButton.icon(
                       onPressed: () {
-                        AutoRouter.of(context).push(const QrReaderRoute());
+                        AutoRouter.of(context)
+                            .push(QrReaderRoute(yapeService: yapeService));
                       },
                       label: const Text(
                         "Escanear QR",
@@ -177,7 +178,7 @@ class HomePage extends ConsumerWidget {
                               await FlutterContacts.getContacts(
                                   withProperties: true);
                           final contacts = mobileContacts
-                              .where((contact) => directoryService
+                              .where((contact) => yapeService
                                   .isPeruvianNumber(contact.phones[0]))
                               .toList();
                           if (context.mounted) {

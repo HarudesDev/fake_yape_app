@@ -1,5 +1,5 @@
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
-import 'package:fake_yape_app/shared/services/directory_service.dart';
+import 'package:fake_yape_app/yape/services/yape_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
@@ -30,7 +30,7 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final directoryService = ref.read(directoryServiceProvider);
+    final yapeService = ref.read(yapeServiceProvider);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -79,8 +79,7 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
                                 .contains(_filterString);
                             return (contactNameContains ||
                                     contactNumberContains) &&
-                                directoryService
-                                    .isPeruvianNumber(contact.phones[0]);
+                                yapeService.isPeruvianNumber(contact.phones[0]);
                           }).toList();
                         });
                       },
@@ -102,7 +101,7 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
                                   title:
                                       Text(filteredContacts[index].displayName),
                                   subtitle: Text(
-                                      directoryService.formatNormalizedNumber(
+                                      yapeService.formatNormalizedNumber(
                                           contact.phones[0], true)),
                                 ),
                                 const Padding(
