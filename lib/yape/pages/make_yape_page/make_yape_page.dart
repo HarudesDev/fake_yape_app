@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
+import 'package:fake_yape_app/shared/services/directory_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:fake_yape_app/yape/repositories/supabase_database_repository.dart';
 import 'package:flutter/material.dart';
@@ -25,15 +26,11 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
   double _yapeoAmount = 0;
   final String _message = "";
 
-  String formatNormalizedNumber(Phone contactPhone) =>
-      "${contactPhone.normalizedNumber.substring(3, 6)}"
-      "${contactPhone.normalizedNumber.substring(6, 9)}"
-      "${contactPhone.normalizedNumber.substring(9)}";
-
   @override
   Widget build(BuildContext context) {
-    final contactUser = ref.watch(
-        userByPhoneProvider(formatNormalizedNumber(widget.contact.phones[0])));
+    final directoryService = ref.read(directoryServiceProvider);
+    final contactUser = ref.watch(userByPhoneProvider(directoryService
+        .formatNormalizedNumber(widget.contact.phones[0], false)));
     final databaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
     final authRepository = ref.read(supabaseAuthRepositoryProvider);
     return Scaffold(
@@ -187,7 +184,7 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                                         }
                                       }
                                     } catch (error) {
-                                      print(error);
+                                      log(error.toString());
                                     }
                                   }
                                 : null;

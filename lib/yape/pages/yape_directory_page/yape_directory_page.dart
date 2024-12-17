@@ -1,37 +1,36 @@
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
+import 'package:fake_yape_app/shared/services/directory_service.dart';
 import 'package:flutter/material.dart';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'yape_directory_components.dart';
 
 @RoutePage()
-class YapeDirectoryPage extends StatefulWidget {
+class YapeDirectoryPage extends ConsumerStatefulWidget {
   const YapeDirectoryPage({super.key, required this.contacts});
   final List<Contact> contacts;
 
   @override
-  State<YapeDirectoryPage> createState() => _YapeDirectoryPageState();
+  ConsumerState<YapeDirectoryPage> createState() => _YapeDirectoryPageState();
 }
 
-class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
+class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
   String _filterString = "";
 
   List<Contact> filteredContacts = [];
 
   @override
   void initState() {
-    filteredContacts = [
-      ...widget.contacts.where((contact) {
-        return isPeruvianNumber(contact.phones[0]);
-      })
-    ];
+    filteredContacts = [...widget.contacts];
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    final directoryService = ref.read(directoryServiceProvider);
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -80,7 +79,8 @@ class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
                                 .contains(_filterString);
                             return (contactNameContains ||
                                     contactNumberContains) &&
-                                isPeruvianNumber(contact.phones[0]);
+                                directoryService
+                                    .isPeruvianNumber(contact.phones[0]);
                           }).toList();
                         });
                       },
@@ -101,8 +101,9 @@ class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
                                   },
                                   title:
                                       Text(filteredContacts[index].displayName),
-                                  subtitle: Text(formatNormalizedNumber(
-                                      contact.phones[0])),
+                                  subtitle: Text(
+                                      directoryService.formatNormalizedNumber(
+                                          contact.phones[0], true)),
                                 ),
                                 const Padding(
                                   padding:
@@ -135,14 +136,4 @@ class _YapeDirectoryPageState extends State<YapeDirectoryPage> {
       ),
     );
   }
-
-  bool isPeruvianNumber(Phone contactPhone) =>
-      contactPhone.normalizedNumber.isEmpty
-          ? false
-          : (contactPhone.normalizedNumber.substring(0, 4) == "+519");
-
-  String formatNormalizedNumber(Phone contactPhone) =>
-      "${contactPhone.normalizedNumber.substring(3, 6)} "
-      "${contactPhone.normalizedNumber.substring(6, 9)} "
-      "${contactPhone.normalizedNumber.substring(9)}";
 }

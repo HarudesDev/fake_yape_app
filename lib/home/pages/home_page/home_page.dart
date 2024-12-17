@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
-import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
+import 'package:fake_yape_app/shared/services/directory_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
@@ -13,12 +13,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'home_components.dart';
 
 @RoutePage()
-class HomePage extends StatelessWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     //final future = Supabase.instance.client.from('countries').select();
+    final directoryService = ref.read(directoryServiceProvider);
 
     return SafeArea(
       child: Container(
@@ -172,9 +173,13 @@ class HomePage extends StatelessWidget {
                         if (!permissionStatus.isGranted) {
                           log("Permisos no concedidos");
                         } else {
-                          final contacts = await FlutterContacts.getContacts(
-                              withProperties: true);
-                          print(contacts[0]);
+                          final mobileContacts =
+                              await FlutterContacts.getContacts(
+                                  withProperties: true);
+                          final contacts = mobileContacts
+                              .where((contact) => directoryService
+                                  .isPeruvianNumber(contact.phones[0]))
+                              .toList();
                           if (context.mounted) {
                             AutoRouter.of(context)
                                 .push(YapeDirectoryRoute(contacts: contacts));
