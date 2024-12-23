@@ -113,6 +113,14 @@ class SupabaseDatabaseRepository {
     return query.isNotEmpty ? MyUser.fromJson(query[0]) : null;
   }
 
+  Future<double?> getUserBalanceByAuthId(String authId) async {
+    final query = await _supabase
+        .from('users')
+        .select('account_balance')
+        .filter('auth_service_id', 'eq', authId);
+    return query.isNotEmpty ? query[0]['account_balance'] : null;
+  }
+
   Future<Yapeo?> doYapeo(
       int senderId, int receiverId, double yapeoAmount, String? message) async {
     final query = await _supabase

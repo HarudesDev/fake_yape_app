@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
-import 'package:fake_yape_app/yape/services/yape_service.dart';
+import 'package:fake_yape_app/shared/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';

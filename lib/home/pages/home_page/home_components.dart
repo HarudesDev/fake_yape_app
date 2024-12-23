@@ -9,15 +9,38 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-class TransactionsList extends ConsumerWidget {
+import 'home_controller.dart';
+
+const hiddenBalanceString = "*****";
+
+class TransactionsList extends ConsumerStatefulWidget {
   const TransactionsList({
     super.key,
   });
+  @override
+  ConsumerState<TransactionsList> createState() => _TransactionsListState();
+}
+
+class _TransactionsListState extends ConsumerState<TransactionsList> {
+  bool showBalance = false;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    ref.listen<AsyncValue<double?>>(
+      homeControllerProvider,
+      (value, state) => state.whenOrNull(
+        error: (error, stack) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(error.toString()),
+          ));
+        },
+        data: (data) {},
+      ),
+    );
+
     final yapeoList = ref.watch(userLastYapeosProvider);
     final user = ref.read(supabaseAuthRepositoryProvider).getUser;
+    final state = ref.watch(homeControllerProvider);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -39,15 +62,37 @@ class TransactionsList extends ConsumerWidget {
                 elevation: const WidgetStatePropertyAll<double>(3),
                 shape: getRoundedRectangleBorder(10.0),
               ),
-              label: const Text(
-                "Mostrar saldo",
-                style: TextStyle(color: mainColor),
+              label: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Mostrar saldo",
+                    style: TextStyle(color: mainColor),
+                  ),
+                  state.when(
+                      data: (data) => Text(
+                            showBalance
+                                ? data != null
+                                    ? "S/ ${data.toString()}"
+                                    : hiddenBalanceString
+                                : hiddenBalanceString,
+                            style: const TextStyle(color: mainColor),
+                          ),
+                      error: (error, stack) => const Text(hiddenBalanceString),
+                      loading: () => const CircularProgressIndicator()),
+                ],
               ),
-              icon: const Icon(
-                Icons.visibility,
+              icon: Icon(
+                showBalance ? Icons.visibility_off : Icons.visibility,
                 color: mainColor,
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (!showBalance) {
+                  ref.read(homeControllerProvider.notifier).getUserBalance();
+                }
+                showBalance = !showBalance;
+                setState(() {});
+              },
             ),
           ),
           const Gap(30),

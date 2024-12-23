@@ -4,7 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
-import 'package:fake_yape_app/yape/services/yape_service.dart';
+import 'package:fake_yape_app/shared/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:fake_yape_app/yape/repositories/supabase_database_repository.dart';
 import 'package:flutter/material.dart';

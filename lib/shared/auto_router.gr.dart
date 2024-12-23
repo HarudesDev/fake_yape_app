@@ -33,7 +33,7 @@ import 'package:fake_yape_app/yape/pages/yape_detail_page/yape_detail_page.dart'
     as _i13;
 import 'package:fake_yape_app/yape/pages/yape_directory_page/yape_directory_page.dart'
     as _i14;
-import 'package:fake_yape_app/yape/services/yape_service.dart' as _i18;
+import 'package:fake_yape_app/shared/services/yape_service.dart' as _i18;
 import 'package:flutter/material.dart' as _i16;
 import 'package:flutter_contacts/flutter_contacts.dart' as _i17;
 
