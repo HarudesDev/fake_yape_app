@@ -116,6 +116,21 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
                         ),
                       )
                     : ListTile(
+                        onTap: () {
+                          AutoRouter.of(context).push(
+                            MakeYapeRoute(
+                              contact: Contact(
+                                displayName: "Nuevo contacto",
+                                phones: [
+                                  Phone(
+                                    "+51$_filterString",
+                                    normalizedNumber: "+51$_filterString",
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                         title: const Text("Nuevo contacto"),
                         subtitle: Text(_filterString),
                       ),
