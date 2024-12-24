@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
@@ -64,12 +65,16 @@ class _CameraViewState extends State<CameraView> {
           : ImageFormatGroup.bgra8888,
     );
     //TODO puede fallar
-    _controller?.initialize().then((_) async {
+    _controller?.initialize().then((_) {
       if (!mounted) {
         return;
       }
       _controller?.startImageStream(_processCameraImage);
-      await _controller?.lockCaptureOrientation();
+      _controller
+          ?.lockCaptureOrientation(DeviceOrientation.portraitUp)
+          .then((onValue) {
+        log('Orientation locked');
+      });
       setState(() {});
     });
   }
