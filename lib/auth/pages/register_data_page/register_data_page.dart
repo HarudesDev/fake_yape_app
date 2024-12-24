@@ -33,13 +33,13 @@ class RegisterDataPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Registro de celular",
+                  "Registra tus datos",
                   style: TextStyle(color: Colors.white),
                 ),
                 Gap(10.0),
                 Text(
-                  "Te enviaremos un código de verificación"
-                  " por SMS para validar tu número.",
+                  "Completa el formulario."
+                  " Recuerda que todos los datos son obligatorios.",
                   style: TextStyle(color: Colors.white),
                 ),
               ],
