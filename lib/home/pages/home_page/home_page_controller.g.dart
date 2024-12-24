@@ -1,26 +1,27 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'home_controller.dart';
+part of 'home_page_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$homeControllerHash() => r'9149f3cfb4cd6fa6ea721585527c7eb0ef6fb472';
+String _$homePageControllerHash() =>
+    r'45fb5db81d8bf995c2101295d3c6b33319ddf3c0';
 
-/// See also [HomeController].
-@ProviderFor(HomeController)
-final homeControllerProvider =
-    AutoDisposeAsyncNotifierProvider<HomeController, double?>.internal(
-  HomeController.new,
-  name: r'homeControllerProvider',
+/// See also [HomePageController].
+@ProviderFor(HomePageController)
+final homePageControllerProvider =
+    AutoDisposeAsyncNotifierProvider<HomePageController, double?>.internal(
+  HomePageController.new,
+  name: r'homePageControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$homeControllerHash,
+      : _$homePageControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$HomeController = AutoDisposeAsyncNotifier<double?>;
+typedef _$HomePageController = AutoDisposeAsyncNotifier<double?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

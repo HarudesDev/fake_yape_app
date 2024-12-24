@@ -100,7 +100,6 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
 
   void onKeyPress(int pos) {
     _password += keyNumbers[pos];
-    log(_password);
     if (_password.length >= 6) {
       switch (widget.pageType) {
         case SecureKeyboardPageType.loginPage:

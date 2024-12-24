@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
-import 'home_controller.dart';
+import 'home_page_controller.dart';
 
 const hiddenBalanceString = "*****";
 
@@ -27,7 +27,7 @@ class _TransactionsListState extends ConsumerState<TransactionsList> {
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<double?>>(
-      homeControllerProvider,
+      homePageControllerProvider,
       (value, state) => state.whenOrNull(
         error: (error, stack) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -40,7 +40,7 @@ class _TransactionsListState extends ConsumerState<TransactionsList> {
 
     final yapeoList = ref.watch(userLastYapeosProvider);
     final user = ref.read(supabaseAuthRepositoryProvider).getUser;
-    final state = ref.watch(homeControllerProvider);
+    final state = ref.watch(homePageControllerProvider);
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
@@ -88,7 +88,9 @@ class _TransactionsListState extends ConsumerState<TransactionsList> {
               ),
               onPressed: () {
                 if (!showBalance) {
-                  ref.read(homeControllerProvider.notifier).getUserBalance();
+                  ref
+                      .read(homePageControllerProvider.notifier)
+                      .getUserBalance();
                 }
                 showBalance = !showBalance;
                 setState(() {});
@@ -194,46 +196,50 @@ class TransactionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                isReceiver ? yapeo.senderName : yapeo.receiverName,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 18,
+      child: InkWell(
+        onTap: () => AutoRouter.of(context)
+            .push(YapeDetailRoute(yapeData: yapeo, isReceiver: isReceiver)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isReceiver ? yapeo.senderName : yapeo.receiverName,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
                 ),
-              ),
-              const Gap(10),
-              Text(
-                _isToday(yapeo.yapeoDate)
-                    ? "Hoy ${DateFormat.jm().format(yapeo.yapeoDate)}"
-                    : _isYesterday(yapeo.yapeoDate)
-                        ? "Ayer ${DateFormat.jm().format(yapeo.yapeoDate)}"
-                        : DateFormat('d MMM. yyyy - ')
-                            .add_jm()
-                            .format(yapeo.yapeoDate),
-                style: const TextStyle(
-                  color: Colors.grey,
-                  fontSize: 16,
+                const Gap(10),
+                Text(
+                  _isToday(yapeo.yapeoDate)
+                      ? "Hoy ${DateFormat.jm().format(yapeo.yapeoDate)}"
+                      : _isYesterday(yapeo.yapeoDate)
+                          ? "Ayer ${DateFormat.jm().format(yapeo.yapeoDate)}"
+                          : DateFormat('d MMM. yyyy - ')
+                              .add_jm()
+                              .format(yapeo.yapeoDate),
+                  style: const TextStyle(
+                    color: Colors.grey,
+                    fontSize: 16,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Text(
-            '${isReceiver ? '' : '-'} S/ '
-            '${yapeo.yapeoAmount.toString()}',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 18,
-              color: isReceiver ? Colors.black : Colors.red,
+              ],
             ),
-          ),
-        ],
+            Text(
+              '${isReceiver ? '' : '-'} S/ '
+              '${yapeo.yapeoAmount.toString()}',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontSize: 18,
+                color: isReceiver ? Colors.black : Colors.red,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

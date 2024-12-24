@@ -7,7 +7,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'yapeos_provider.g.dart';
 
-final userLastYapeosProvider = FutureProvider<List<Yapeo>>((ref) async {
+final userLastYapeosProvider =
+    AutoDisposeFutureProvider<List<Yapeo>>((ref) async {
   final supabaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
   final auth = ref.read(supabaseAuthRepositoryProvider);
   final user = await supabaseRepository.getUserByAuthId(auth.getUser!.id);

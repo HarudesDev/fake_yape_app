@@ -166,7 +166,6 @@ class HomePage extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(
-                    //TODO implementar navegación
                     child: OutlinedButton.icon(
                       onPressed: () async {
                         final permissionStatus =

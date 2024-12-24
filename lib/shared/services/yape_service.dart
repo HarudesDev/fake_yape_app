@@ -45,6 +45,6 @@ class YapeService {
       ];
 }
 
-final yapeServiceProvider = Provider<YapeService>(
+final yapeServiceProvider = AutoDisposeProvider<YapeService>(
   (ref) => YapeService(),
 );

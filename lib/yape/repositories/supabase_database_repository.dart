@@ -148,11 +148,20 @@ class SupabaseDatabaseRepository {
       return null;
     }
   }
+
+  Future<bool> isPhoneNumberUnregistered(String phoneNumber) async {
+    final query = await _supabase
+        .from('users')
+        .select('phone_number')
+        .eq('phone_number', phoneNumber);
+    return query.isEmpty;
+  }
 }
 
 final supabaseClientProvider =
-    Provider<SupabaseClient>((ref) => Supabase.instance.client);
+    AutoDisposeProvider<SupabaseClient>((ref) => Supabase.instance.client);
 
-final supabaseDatabaseRepositoryProvider = Provider<SupabaseDatabaseRepository>(
+final supabaseDatabaseRepositoryProvider =
+    AutoDisposeProvider<SupabaseDatabaseRepository>(
   (ref) => SupabaseDatabaseRepository(ref.read(supabaseClientProvider)),
 );

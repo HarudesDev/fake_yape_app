@@ -10,8 +10,9 @@ class SupabaseAuthRepository {
 }
 
 final supabaseAuthProvider =
-    Provider<GoTrueClient>((ref) => Supabase.instance.client.auth);
+    AutoDisposeProvider<GoTrueClient>((ref) => Supabase.instance.client.auth);
 
-final supabaseAuthRepositoryProvider = Provider<SupabaseAuthRepository>(
+final supabaseAuthRepositoryProvider =
+    AutoDisposeProvider<SupabaseAuthRepository>(
   (ref) => SupabaseAuthRepository(ref.read(supabaseAuthProvider)),
 );

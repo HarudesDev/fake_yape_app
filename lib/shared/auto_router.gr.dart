@@ -24,6 +24,7 @@ import 'package:fake_yape_app/home/pages/menu_page/menu_my_qr.dart' as _i4;
 import 'package:fake_yape_app/home/pages/menu_page/menu_page.dart' as _i5;
 import 'package:fake_yape_app/home/pages/transactions_page/transactions_page.dart'
     as _i10;
+import 'package:fake_yape_app/shared/services/yape_service.dart' as _i18;
 import 'package:fake_yape_app/yape/models/yapeo.dart' as _i19;
 import 'package:fake_yape_app/yape/pages/make_yape_page/make_yape_page.dart'
     as _i3;
@@ -33,7 +34,6 @@ import 'package:fake_yape_app/yape/pages/yape_detail_page/yape_detail_page.dart'
     as _i13;
 import 'package:fake_yape_app/yape/pages/yape_directory_page/yape_directory_page.dart'
     as _i14;
-import 'package:fake_yape_app/shared/services/yape_service.dart' as _i18;
 import 'package:flutter/material.dart' as _i16;
 import 'package:flutter_contacts/flutter_contacts.dart' as _i17;
 
