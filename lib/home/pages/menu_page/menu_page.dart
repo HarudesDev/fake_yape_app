@@ -121,9 +121,17 @@ class MenuPage extends StatelessWidget {
                     ),
                     InkWell(
                       onTap: () async {
-                        await _supaBase.auth.signOut();
-                        if (context.mounted) {
-                          AutoRouter.of(context).popUntilRoot();
+                        final supabase = Supabase.instance.client;
+                        final userId = supabase.auth.currentUser?.id;
+                        if (userId != null) {
+                          await supabase
+                              .from('users')
+                              .update({'fcm_token': null}).eq(
+                                  'auth_service_id', userId);
+                          await _supaBase.auth.signOut();
+                          if (context.mounted) {
+                            AutoRouter.of(context).popUntilRoot();
+                          }
                         }
                       },
                       child: const BottomMenuOptions(

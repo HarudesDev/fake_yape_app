@@ -22,6 +22,7 @@
     "SOAT",
     "spinkit",
     "supabase",
+    "Symbolication",
     "Tambo",
     "Vergil",
     "wisy",
@@ -49,5 +50,6 @@
   },
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.expand": false,
-  "dart.previewFlutterUiGuides": true
+  "dart.previewFlutterUiGuides": true,
+  "deno.enable": true
 }

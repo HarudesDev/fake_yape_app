@@ -44,3 +44,7 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+/supabase/functions/service-account.json
+
+/node_modules

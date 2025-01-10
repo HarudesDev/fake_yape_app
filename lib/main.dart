@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,6 +19,8 @@ void main() async {
         "MzI2NzU5MTksImV4cCI6MjA0ODI1MTkxOX0.N5Y"
         "Fy6AbOFb6WGLo-ykwSKZ1MozUlIY6CZdvrU7S9xM",
   );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(ProviderScope(
     child: MyApp(),
