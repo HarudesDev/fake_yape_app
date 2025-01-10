@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
+import 'package:fake_yape_app/shared/components.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/shared/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
@@ -125,13 +126,35 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                         },
                       ),
                     ),
-                    const Text(
-                      "Límite por yapeo S/ 500, "
-                      "límite total por día S/2, 000",
-                      style: TextStyle(
-                        fontSize: 13,
-                      ),
-                    ),
+                    _yapeoAmount > 0 && _yapeoAmount <= 500
+                        ? Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.grey.withOpacity(0.1),
+                            ),
+                            child: const Text(
+                              "Límite por yapeo S/ 500, "
+                              "límite total por día S/2, 000",
+                              style: TextStyle(
+                                fontSize: 13,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Colors.red.withOpacity(0.1),
+                            ),
+                            child: const Text(
+                              "El monto ingresado no es válido",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.red,
+                              ),
+                            ),
+                          ),
                   ],
                 ),
                 Column(
@@ -166,67 +189,107 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                         ),
                         const Gap(10),
                         Expanded(
-                          child: OutlinedButton(
-                            onPressed: contactUser.when(
-                              data: (data) {
-                                return !state.isLoading &&
-                                        data != null &&
-                                        _yapeoAmount > 0 &&
-                                        _yapeoAmount <= 500
-                                    ? () async {
-                                        try {
-                                          final sender =
-                                              await databaseRepository
-                                                  .getUserByAuthId(
-                                                      authRepository
-                                                          .getUser!.id);
-                                          final yapeoData = await ref
-                                              .read(
-                                                  makeYapePageControllerProvider
-                                                      .notifier)
-                                              .doYapeo(sender!.id, data.id,
-                                                  _yapeoAmount, _message);
-                                          if (yapeoData != null) {
-                                            // ignore: unused_result
-                                            ref.refresh(userLastYapeosProvider);
-                                            if (context.mounted) {
-                                              AutoRouter.of(context)
-                                                  .replaceAll([
-                                                YapeDetailRoute(
-                                                  yapeData: yapeoData,
-                                                  isReceiver: false,
-                                                )
-                                              ]);
-                                            }
-                                          } else {
-                                            if (context.mounted) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text("Saldo insuficiente"),
-                                              ));
-                                            }
+                          child: contactUser.when(
+                            data: (data) => TextButton(
+                              onPressed: !state.isLoading &&
+                                      data != null &&
+                                      _yapeoAmount > 0 &&
+                                      _yapeoAmount <= 500
+                                  ? () async {
+                                      try {
+                                        final sender = await databaseRepository
+                                            .getUserByAuthId(
+                                                authRepository.getUser!.id);
+                                        final yapeoData = await ref
+                                            .read(makeYapePageControllerProvider
+                                                .notifier)
+                                            .doYapeo(sender!.id, data.id,
+                                                _yapeoAmount, _message);
+                                        if (yapeoData != null) {
+                                          // ignore: unused_result
+                                          ref.refresh(userLastYapeosProvider);
+                                          if (context.mounted) {
+                                            AutoRouter.of(context).replaceAll([
+                                              YapeDetailRoute(
+                                                yapeData: yapeoData,
+                                                isReceiver: false,
+                                                isNewYapeo: true,
+                                              )
+                                            ]);
                                           }
-                                        } catch (error) {
-                                          log(error.toString());
+                                        } else {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("Saldo insuficiente"),
+                                            ));
+                                          }
                                         }
+                                      } catch (error) {
+                                        log(error.toString());
                                       }
-                                    : null;
-                              },
-                              loading: () => null,
-                              error: (error, stackTrace) => null,
-                            ),
-                            style: ButtonStyle(
-                              shape: getRoundedRectangleBorder(5),
-                              backgroundColor:
-                                  const WidgetStatePropertyAll(secondaryColor),
-                              side: const WidgetStatePropertyAll(
-                                BorderSide(color: Colors.transparent),
+                                    }
+                                  : null,
+                              style: data != null &&
+                                      _yapeoAmount > 0 &&
+                                      _yapeoAmount <= 500
+                                  ? ButtonStyle(
+                                      shape: getRoundedRectangleBorder(5),
+                                      backgroundColor:
+                                          const WidgetStatePropertyAll(
+                                              secondaryColor),
+                                      side: const WidgetStatePropertyAll(
+                                        BorderSide(color: Colors.transparent),
+                                      ),
+                                    )
+                                  : ButtonStyle(
+                                      shape: getRoundedRectangleBorder(5),
+                                      backgroundColor: WidgetStatePropertyAll(
+                                          Colors.grey[300]),
+                                      side: const WidgetStatePropertyAll(
+                                        BorderSide(color: Colors.transparent),
+                                      ),
+                                    ),
+                              child: Text(
+                                "Yapear",
+                                style: TextStyle(
+                                    color: data != null &&
+                                            _yapeoAmount > 0 &&
+                                            _yapeoAmount <= 500
+                                        ? Colors.white
+                                        : Colors.grey[600]),
                               ),
                             ),
-                            child: const Text(
-                              "Yapear",
-                              style: TextStyle(color: Colors.white),
+                            error: (error, stack) => TextButton(
+                              onPressed: null,
+                              style: ButtonStyle(
+                                shape: getRoundedRectangleBorder(5),
+                                backgroundColor:
+                                    WidgetStatePropertyAll(Colors.grey[300]),
+                                side: const WidgetStatePropertyAll(
+                                  BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                              child: Text(
+                                "Yapear",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
+                            ),
+                            loading: () => TextButton(
+                              onPressed: null,
+                              style: ButtonStyle(
+                                shape: getRoundedRectangleBorder(5),
+                                backgroundColor:
+                                    WidgetStatePropertyAll(Colors.grey[300]),
+                                side: const WidgetStatePropertyAll(
+                                  BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                              child: Text(
+                                "Yapear",
+                                style: TextStyle(color: Colors.grey[600]),
+                              ),
                             ),
                           ),
                         )
@@ -245,7 +308,7 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
           ),
         if (state.isLoading)
           const Center(
-            child: CircularProgressIndicator(),
+            child: CustomYapeLoader(),
           ),
       ],
     );

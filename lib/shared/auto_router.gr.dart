@@ -402,6 +402,7 @@ class YapeDetailRoute extends _i15.PageRouteInfo<YapeDetailRouteArgs> {
     _i16.Key? key,
     required _i19.Yapeo yapeData,
     required bool isReceiver,
+    required bool isNewYapeo,
     List<_i15.PageRouteInfo>? children,
   }) : super(
           YapeDetailRoute.name,
@@ -409,6 +410,7 @@ class YapeDetailRoute extends _i15.PageRouteInfo<YapeDetailRouteArgs> {
             key: key,
             yapeData: yapeData,
             isReceiver: isReceiver,
+            isNewYapeo: isNewYapeo,
           ),
           initialChildren: children,
         );
@@ -423,6 +425,7 @@ class YapeDetailRoute extends _i15.PageRouteInfo<YapeDetailRouteArgs> {
         key: args.key,
         yapeData: args.yapeData,
         isReceiver: args.isReceiver,
+        isNewYapeo: args.isNewYapeo,
       );
     },
   );
@@ -433,6 +436,7 @@ class YapeDetailRouteArgs {
     this.key,
     required this.yapeData,
     required this.isReceiver,
+    required this.isNewYapeo,
   });
 
   final _i16.Key? key;
@@ -441,9 +445,11 @@ class YapeDetailRouteArgs {
 
   final bool isReceiver;
 
+  final bool isNewYapeo;
+
   @override
   String toString() {
-    return 'YapeDetailRouteArgs{key: $key, yapeData: $yapeData, isReceiver: $isReceiver}';
+    return 'YapeDetailRouteArgs{key: $key, yapeData: $yapeData, isReceiver: $isReceiver, isNewYapeo: $isNewYapeo}';
   }
 }
 

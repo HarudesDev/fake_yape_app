@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 
 import 'home_page_controller.dart';
 
-const hiddenBalanceString = "*****";
+const hiddenBalanceString = "";
 
 class TransactionsList extends ConsumerStatefulWidget {
   const TransactionsList({
@@ -43,6 +43,7 @@ class _TransactionsListState extends ConsumerState<TransactionsList> {
     final state = ref.watch(homePageControllerProvider);
     return Container(
       padding: const EdgeInsets.all(20),
+      constraints: const BoxConstraints(minHeight: 500),
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -65,9 +66,9 @@ class _TransactionsListState extends ConsumerState<TransactionsList> {
               label: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "Mostrar saldo",
-                    style: TextStyle(color: mainColor),
+                  Text(
+                    showBalance ? "Ocultar saldo" : "Mostrar saldo",
+                    style: const TextStyle(color: mainColor),
                   ),
                   state.when(
                       data: (data) => Text(
@@ -197,8 +198,8 @@ class TransactionTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: InkWell(
-        onTap: () => AutoRouter.of(context)
-            .push(YapeDetailRoute(yapeData: yapeo, isReceiver: isReceiver)),
+        onTap: () => AutoRouter.of(context).push(YapeDetailRoute(
+            yapeData: yapeo, isReceiver: isReceiver, isNewYapeo: false)),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
