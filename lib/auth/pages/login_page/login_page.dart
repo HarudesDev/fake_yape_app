@@ -24,6 +24,7 @@ class LoginPage extends StatelessWidget {
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
+          appBar: AppBar(),
           body: ListView(
             padding: const EdgeInsets.fromLTRB(0, 300, 0, 0),
             shrinkWrap: true,
