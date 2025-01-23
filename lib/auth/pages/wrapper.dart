@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:developer';
 
 import 'package:fake_yape_app/auth/pages/welcome_page/welcome_page.dart';
@@ -7,6 +9,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 @RoutePage()
@@ -39,8 +42,16 @@ class _WrapperState extends ConsumerState<Wrapper> {
       log('Notificación recibida');
       final notification = data.notification;
       if (notification != null && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text("${notification.title} ${notification.body}")));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${notification.title}\n${notification.body}"),
+            backgroundColor: const Color.fromRGBO(94, 13, 102, 1),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
       }
     });
   }
@@ -60,6 +71,17 @@ class _WrapperState extends ConsumerState<Wrapper> {
 
     return authState.when(
         data: (user) {
+          print(user.event.name);
+          if (user.session != null) {
+            print(user.session!.accessToken);
+            print(JwtDecoder.isExpired(user.session!.accessToken));
+            print(JwtDecoder.getExpirationDate(user.session!.accessToken));
+          }
+          if (user.event.name == "tokenRefreshed") {
+            print("Token refreshed");
+            Supabase.instance.client.auth.signOut();
+            return const HomePage();
+          }
           return user.session == null ? const WelcomePage() : const HomePage();
         },
         error: (error, _) => Text('Error:$error'),

@@ -55,8 +55,8 @@ Deno.serve(async (req) => {
         message: {
           token: fcmToken,
           notification: {
-            title: 'Yapeo',
-            body: `${senderName} te envió un yapeo por S\/ ${payload.record.yapeo_amount}`
+            title: 'Confirmación de Pago',
+            body: `Yape! ${senderName} te envió un pago por S\/ ${payload.record.yapeo_amount}`
           },
         },
       }),
