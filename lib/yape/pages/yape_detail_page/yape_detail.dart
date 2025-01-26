@@ -2,6 +2,7 @@ import 'package:fake_yape_app/shared/style.dart';
 import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
 import 'yape_detail_components.dart';
 
@@ -60,7 +61,7 @@ class YapeDetail extends StatelessWidget {
           ),
         ),
         Text(
-          yapeData.yapeoDate.toString(),
+          DateFormat('d MMM. yyyy - ').add_jm().format(yapeData.yapeoDate),
           style: TextStyle(
             color: Colors.grey[700],
             fontSize: 14,
