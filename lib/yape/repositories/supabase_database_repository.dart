@@ -72,7 +72,7 @@ class SupabaseDatabaseRepository {
   Future<Yapeo?> getYapeoById(int yapeoId) async {
     final query = await _supabase
         .from('yapeos')
-        .select('id, yapeo_amount, yapeo_date, '
+        .select('id, yapeo_amount, yapeo_date, message,'
             'sender:sender_id(fullname, phone_number),'
             ' receiver:receiver_id(fullname, phone_number)')
         .eq('id', yapeoId);
