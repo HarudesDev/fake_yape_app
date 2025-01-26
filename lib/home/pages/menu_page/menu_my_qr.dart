@@ -3,11 +3,14 @@ import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 @RoutePage()
 class MenuMyQrPage extends ConsumerWidget {
   const MenuMyQrPage({super.key});
+
+  static const _storage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -16,6 +19,9 @@ class MenuMyQrPage extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: mainColor,
         centerTitle: true,
+        iconTheme: const IconThemeData(
+          color: Colors.white,
+        ),
         title: const Text(
           "Mi QR",
           style: TextStyle(
@@ -56,12 +62,20 @@ class MenuMyQrPage extends ConsumerWidget {
                           padding: const EdgeInsets.all(25.0),
                           child: Column(
                             children: [
-                              QrImageView(
-                                  size: 150,
-                                  data:
-                                      '{"phoneNumber":"+51${user!.userMetadata!['phoneNumber']}","userName":"${user.userMetadata!['fullName']}"}'),
+                              FutureBuilder<String?>(
+                                future: _storage.read(key: "QRData"),
+                                builder: (BuildContext context,
+                                        AsyncSnapshot<String?> snapshot) =>
+                                    snapshot.data != null
+                                        ? QrImageView(
+                                            size: 150,
+                                            data: snapshot.data!,
+                                          )
+                                        : const Text(
+                                            "Hubo un error cargando el QR"),
+                              ),
                               Text(
-                                user.userMetadata!['fullName'],
+                                user!.userMetadata!['fullName'],
                                 style: const TextStyle(
                                   color: mainColor,
                                 ),
