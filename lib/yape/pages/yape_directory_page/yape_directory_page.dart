@@ -98,11 +98,23 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
                                     AutoRouter.of(context)
                                         .push(MakeYapeRoute(contact: contact));
                                   },
-                                  title:
-                                      Text(filteredContacts[index].displayName),
+                                  title: Text(
+                                    filteredContacts[index].displayName,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                   subtitle: Text(
-                                      yapeService.formatNormalizedNumber(
-                                          contact.phones[0], true)),
+                                    yapeService.formatNormalizedNumber(
+                                      contact.phones[0],
+                                      true,
+                                    ),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w300,
+                                      color: Colors.grey[500],
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ),
                                 const Padding(
                                   padding:
@@ -131,8 +143,20 @@ class _YapeDirectoryPageState extends ConsumerState<YapeDirectoryPage> {
                             ),
                           );
                         },
-                        title: const Text("Nuevo contacto"),
-                        subtitle: Text(_filterString),
+                        title: const Text(
+                          "Nuevo contacto",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        subtitle: Text(
+                          _filterString,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w300,
+                            color: Colors.grey[500],
+                            fontSize: 12,
+                          ),
+                        ),
                       ),
               ],
             ),
