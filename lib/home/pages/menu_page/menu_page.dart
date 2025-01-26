@@ -1,9 +1,11 @@
 import 'dart:developer';
 
+import 'package:fake_yape_app/auth/pages/welcome_page/welcome_page.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import './menu_components.dart';
@@ -13,6 +15,7 @@ class MenuPage extends StatelessWidget {
   MenuPage({super.key});
 
   final _supaBase = Supabase.instance.client;
+  static const _secureStorage = FlutterSecureStorage();
 
   @override
   Widget build(BuildContext context) {
@@ -91,23 +94,53 @@ class MenuPage extends StatelessWidget {
                   children: [
                     const Categories(),
                     const Gap(60),
-                    const Row(
+                    Row(
                       children: [
-                        Text("Versión Yape: "),
-                        Text("3.31.0"),
+                        Text(
+                          "Versión Yape: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        Text(
+                          "3.31.0",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ],
                     ),
-                    const Row(
+                    Row(
                       children: [
-                        Text("Tipo de cuenta:"),
-                        Text("Yape con BCP"),
+                        Text(
+                          "Tipo de cuenta:",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        Text(
+                          "Yape con BCP",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ],
                     ),
-                    const Text("BANCO DE CRÉDITO DEL PERÚ"),
-                    const Row(
+                    Text(
+                      "BANCO DE CRÉDITO DEL PERÚ",
+                      style: TextStyle(color: Colors.grey[600]),
+                    ),
+                    Row(
                       children: [
-                        Text("RUC: "),
-                        Text("20100047218"),
+                        Text(
+                          "RUC: ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        Text(
+                          "20100047218",
+                          style: TextStyle(color: Colors.grey[600]),
+                        ),
                       ],
                     ),
                     const Gap(10),
@@ -130,7 +163,9 @@ class MenuPage extends StatelessWidget {
                                   'auth_service_id', userId);
                           await _supaBase.auth.signOut();
                           if (context.mounted) {
-                            AutoRouter.of(context).popUntilRoot();
+                            _secureStorage.deleteAll();
+                            AutoRouter.of(context)
+                                .replaceAll([const WelcomeRoute()]);
                           }
                         }
                       },

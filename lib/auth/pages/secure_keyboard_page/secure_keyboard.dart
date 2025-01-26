@@ -6,6 +6,7 @@ import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_pa
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -22,16 +23,26 @@ class SecureKeyboard extends StatefulWidget {
 class _SecureKeyboardState extends State<SecureKeyboard> {
   String _password = "";
   final _supaBase = Supabase.instance.client;
+  static const _secureStorage = FlutterSecureStorage();
 
   List<String> keyNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
   Future<void> _signIn() async {
     try {
-      await _supaBase.auth.signInWithPassword(
+      final response = await _supaBase.auth.signInWithPassword(
         email: widget.parameters['email'],
         password: _password,
       );
-      if (mounted) {
+      if (mounted && response.session != null) {
+        final userData = response.user!.userMetadata!;
+        await _secureStorage.write(
+            key: "email", value: widget.parameters['email']);
+        await _secureStorage.write(key: "password", value: _password);
+        await _secureStorage.write(
+            key: "QRData",
+            value: '{"phoneNumber":"+51${userData['phoneNumber']}"'
+                ',"userName":"${userData['fullName']}"}');
+        AutoRouter.of(context).replaceAll([const HomeRoute()]);
         log("Ingreso exitoso");
       }
     } on AuthException catch (error) {
@@ -44,9 +55,6 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
       log(_supaBase.auth.currentUser != null
           ? _supaBase.auth.currentUser!.id
           : "Sin acceder");
-    }
-    if (mounted) {
-      AutoRouter.of(context).popUntilRoot();
     }
   }
 
@@ -66,6 +74,7 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
         password: _password,
         email: parameters['email'],
         data: {
+          'phoneNumber': parameters['phoneNumber'],
           'documentType': parameters['documentType'],
           'documentNumber': parameters['documentNumber'],
           'fullName': parameters['fullName'],
@@ -81,7 +90,15 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
           'auth_service_id': authStatus.user!.id,
         });
         if (mounted) {
-          AutoRouter.of(context).popUntilRoot();
+          await _secureStorage.write(
+              key: "email", value: widget.parameters['email']);
+          await _secureStorage.write(key: "password", value: _password);
+          await _secureStorage.write(
+              key: "QRData",
+              value: '{"phoneNumber":"+51${parameters['phoneNumber']}"'
+                  ',"userName":"${parameters['fullName']}"}');
+
+          AutoRouter.of(context).replaceAll([const HomeRoute()]);
         }
       }
     } on AuthException catch (error) {
