@@ -26,7 +26,7 @@ class MakeYapePage extends ConsumerStatefulWidget {
 
 class _MakeYapePageState extends ConsumerState<MakeYapePage> {
   double _yapeoAmount = 0;
-  final String _message = "";
+  String _message = "";
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +169,9 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                           fontWeight: FontWeight.w300,
                         ),
                       ),
+                      onChanged: (value) {
+                        _message = value;
+                      },
                       textAlign: TextAlign.center,
                     ),
                     Row(
