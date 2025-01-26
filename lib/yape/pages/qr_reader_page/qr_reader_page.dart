@@ -60,7 +60,7 @@ class _QrReaderPageState extends State<QrReaderPage> {
             // dev.log(barcode.rawValue!);
             var isInsideTheBox = true;
             barcode.cornerPoints.asMap().forEach((index, point) {
-              if (point.distanceTo(containerBoxPoints[index]) > 50) {
+              if (point.distanceTo(containerBoxPoints[index]) > 150) {
                 isInsideTheBox = false;
               }
             });
