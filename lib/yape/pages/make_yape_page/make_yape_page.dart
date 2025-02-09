@@ -4,6 +4,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/components.dart';
+import 'package:fake_yape_app/shared/providers/router_provider.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/shared/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 @RoutePage()
 class MakeYapePage extends ConsumerStatefulWidget {
@@ -47,6 +49,7 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
         yapeService.formatNormalizedNumber(widget.contact.phones[0], false)));
     final databaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
     final authRepository = ref.read(supabaseAuthRepositoryProvider);
+    final accessToken = authRepository.getAccessToken;
     final state = ref.watch(makeYapePageControllerProvider);
     return Stack(
       children: [
@@ -200,14 +203,11 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                                       _yapeoAmount <= 500
                                   ? () async {
                                       try {
-                                        final sender = await databaseRepository
-                                            .getUserByAuthId(
-                                                authRepository.getUser!.id);
                                         final yapeoData = await ref
                                             .read(makeYapePageControllerProvider
                                                 .notifier)
-                                            .doYapeo(sender!.id, data.id,
-                                                _yapeoAmount, _message);
+                                            .doYapeo(data.id, _yapeoAmount,
+                                                _message);
                                         if (yapeoData != null) {
                                           // ignore: unused_result
                                           ref.refresh(userLastYapeosProvider);
@@ -231,6 +231,8 @@ class _MakeYapePageState extends ConsumerState<MakeYapePage> {
                                         }
                                       } catch (error) {
                                         log(error.toString());
+                                        ref.read(autoRouterProvider).replaceAll(
+                                            [const LoggedAccessRoute()]);
                                       }
                                     }
                                   : null,

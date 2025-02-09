@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
+import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/providers/yapeos_provider.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:fake_yape_app/yape/models/yapeo.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import 'transactions_components.dart';
 
@@ -24,7 +26,7 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage> {
       .subtract(const Duration(days: 7))
       .copyWith(hour: 0, minute: 0, second: 0);
 
-  void _showActionSheet(BuildContext context) {
+  void _showActionSheet(BuildContext context, String? accessToken) {
     showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) => CupertinoActionSheet(
@@ -90,7 +92,8 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage> {
     final yapeos = ref.watch(
       userLastYapeosFromDateProvider(dateFilter),
     );
-    final user = ref.read(supabaseAuthRepositoryProvider).getUser;
+    final authRepository = ref.read(supabaseAuthRepositoryProvider);
+    final user = authRepository.getUser;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -116,7 +119,8 @@ class _TransactionsPageState extends ConsumerState<TransactionsPage> {
               Icons.tune,
               color: Colors.white,
             ),
-            onPressed: () => _showActionSheet(context),
+            onPressed: () =>
+                _showActionSheet(context, authRepository.getAccessToken),
           ),
         ],
       ),

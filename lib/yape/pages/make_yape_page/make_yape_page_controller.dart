@@ -1,3 +1,4 @@
+import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/yape/models/yapeo.dart';
 import 'package:fake_yape_app/yape/repositories/supabase_database_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -12,7 +13,11 @@ class MakeYapePageController extends _$MakeYapePageController {
   }
 
   Future<Yapeo?> doYapeo(
-      int senderId, int receiverId, double yapeoAmount, String? message) async {
+      int receiverId, double yapeoAmount, String? message) async {
+    final databaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
+    final authRepository = ref.read(supabaseAuthRepositoryProvider);
+    final sender =
+        await databaseRepository.getUserByAuthId(authRepository.getUser!.id);
     state = const AsyncLoading();
     final supabaseDatabaseRepository =
         ref.read(supabaseDatabaseRepositoryProvider);
@@ -20,7 +25,7 @@ class MakeYapePageController extends _$MakeYapePageController {
     state = await AsyncValue.guard(
       () async {
         yapeo = await supabaseDatabaseRepository.doYapeo(
-            senderId, receiverId, yapeoAmount, message);
+            sender!.id, receiverId, yapeoAmount, message);
       },
     );
     return yapeo;

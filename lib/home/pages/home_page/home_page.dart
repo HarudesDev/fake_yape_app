@@ -2,8 +2,10 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
+import 'package:fake_yape_app/shared/auto_router.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/components.dart';
+import 'package:fake_yape_app/shared/providers/router_provider.dart';
 import 'package:fake_yape_app/shared/services/yape_service.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,7 @@ class HomePage extends ConsumerWidget {
     //final future = Supabase.instance.client.from('countries').select();
     final yapeService = ref.read(yapeServiceProvider);
     final authRepository = ref.read(supabaseAuthProvider);
+    final autoRouter = ref.read(autoRouterProvider);
 
     return SafeArea(
       child: Container(

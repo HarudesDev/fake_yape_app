@@ -1,55 +1,82 @@
-// ignore_for_file: avoid_print
+import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:fake_yape_app/shared/auto_router.dart';
+import 'package:fake_yape_app/shared/auto_router.gr.dart';
+import 'package:fake_yape_app/shared/components.dart';
+import 'package:fake_yape_app/shared/providers/router_provider.dart';
+import 'package:fake_yape_app/shared/providers/startup_provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 
-import 'firebase_options.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await Supabase.initialize(
-    url: 'https://hucmutcebtbdehcqbcxt.supabase.co',
-    // cSpell:disable
-    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdX"
-        "BhYmFzZSIsInJlZiI6Imh1Y211dGNlYnRiZG"
-        "VoY3FiY3h0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3"
-        "MzI2NzU5MTksImV4cCI6MjA0ODI1MTkxOX0.N5Y"
-        "Fy6AbOFb6WGLo-ykwSKZ1MozUlIY6CZdvrU7S9xM",
-  );
-
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await Supabase.instance.client.auth.signOut();
-
-  runApp(ProviderScope(
-    child: MyApp(),
+void main() {
+  runApp(const ProviderScope(
+    child: AppStartupWidget(),
   ));
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-  final _appRouter = AppRouter();
-  // This widget is the root of your application.
+class AppStartupWidget extends ConsumerWidget {
+  const AppStartupWidget({super.key});
+
   @override
-  Widget build(BuildContext context) {
-    final localAuth = LocalAuthentication();
-    localAuth.canCheckBiometrics.then((data) => print(data));
-    localAuth.isDeviceSupported().then((data) => print(data));
-    localAuth.getAvailableBiometrics().then((data) {
-      print(data.length);
-      for (var type in data) {
-        print(type.name);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final appStartupState = ref.watch(appStartupProvider);
+    return appStartupState.when(
+      data: (_) => MyApp(),
+      error: (error, _) => MaterialApp(
+        home: AppStartupErrorWidget(error: error),
+      ),
+      loading: () => const MaterialApp(home: AppStartupLoadingWidget()),
+    );
+  }
+}
+
+class MyApp extends ConsumerWidget {
+  MyApp({super.key});
+  final supabase = Supabase.instance.client;
+
+  Future<void> _setFcmToken(String fcmToken) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId != null) {
+      await supabase
+          .from('users')
+          .update({'fcm_token': fcmToken}).eq('auth_service_id', userId);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final autoRouter = ref.read(autoRouterProvider);
+    Supabase.instance.client.auth.signOut();
+    Supabase.instance.client.auth.onAuthStateChange.listen((authState) {
+      if (authState.event.name == "tokenRefreshed") {
+        log("Token refreshed");
+        Supabase.instance.client.auth.signOut();
       }
     });
+    FirebaseMessaging.onMessage.listen((data) {
+      log('Notificación recibida');
+      final notification = data.notification;
+      if (notification != null && context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("${notification.title}\n${notification.body}"),
+            backgroundColor: const Color.fromRGBO(94, 13, 102, 1),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        );
+      }
+    });
+    FirebaseMessaging.instance.onTokenRefresh.listen((event) async {
+      _setFcmToken(event);
+    });
     return MaterialApp.router(
-      routerConfig: _appRouter.config(
+      routerConfig: autoRouter.config(
         reevaluateListenable: ReevaluateListenable.stream(
           Supabase.instance.client.auth.onAuthStateChange,
         ),

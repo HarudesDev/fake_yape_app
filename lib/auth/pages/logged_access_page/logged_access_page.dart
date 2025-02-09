@@ -1,16 +1,34 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/pages/logged_access_page/logged_access_components.dart';
+import 'package:fake_yape_app/shared/components.dart';
+import 'package:fake_yape_app/shared/providers/qr_data_provider.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 @RoutePage()
-class LoggedAccessPage extends StatelessWidget {
+class LoggedAccessPage extends ConsumerWidget {
   const LoggedAccessPage({super.key});
 
-  static const storage = FlutterSecureStorage();
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final qRData = ref.watch(qRDataProvider);
+    return qRData.when(
+      data: (data) => LoggedAccess(qRData: data),
+      error: (error, _) => const Scaffold(),
+      loading: () => const AppStartupLoadingWidget(),
+    );
+  }
+}
+
+class LoggedAccess extends StatelessWidget {
+  const LoggedAccess({
+    super.key,
+    required this.qRData,
+  });
+  final String? qRData;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +47,7 @@ class LoggedAccessPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          automaticallyImplyLeading: false,
           actions: [
             ElevatedButton.icon(
               onPressed: () {},
@@ -43,62 +62,56 @@ class LoggedAccessPage extends StatelessWidget {
         ),
         backgroundColor: Colors.transparent,
         body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Gap(50),
+            const Gap(0),
             Center(
               child: Container(
+                padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(
                     Radius.circular(10),
                   ),
                 ),
-                child: FutureBuilder<String?>(
-                  future: storage.read(key: "QRData"),
-                  builder:
-                      (BuildContext context, AsyncSnapshot<String?> snapshot) =>
-                          snapshot.data != null
-                              ? QrImageView(
-                                  size: 165,
-                                  data: snapshot.data!,
-                                )
-                              : const Text("Hubo un error cargando el QR"),
-                ),
+                child: qRData != null
+                    ? QrImageView(
+                        size: 145,
+                        data: qRData!,
+                      )
+                    : const Text("Hubo un error cargando el QR"),
               ),
             ),
-            const Gap(70),
-            Expanded(
-              child: Container(
-                height: double.infinity,
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 40,
-                  horizontal: 20,
+            const Gap(20),
+            Container(
+              padding: const EdgeInsets.symmetric(
+                vertical: 40,
+                horizontal: 20,
+              ),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
                 ),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    const LoggedSecureKeyboard(),
-                    TextButton(
-                      onPressed: () {},
-                      style: const ButtonStyle(
-                        foregroundColor: WidgetStatePropertyAll(secondaryColor),
-                      ),
-                      child: const Text(
-                        "¿Olvidaste tu clave?",
-                        style: TextStyle(
-                          fontSize: 18,
-                        ),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const LoggedSecureKeyboard(),
+                  TextButton(
+                    onPressed: () {},
+                    style: const ButtonStyle(
+                      foregroundColor: WidgetStatePropertyAll(secondaryColor),
+                    ),
+                    child: const Text(
+                      "¿Olvidaste tu clave?",
+                      style: TextStyle(
+                        fontSize: 18,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ],

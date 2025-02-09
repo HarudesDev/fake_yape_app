@@ -30,3 +30,44 @@ class CustomYapeLoader extends StatelessWidget {
     );
   }
 }
+
+class AppStartupLoadingWidget extends StatelessWidget {
+  const AppStartupLoadingWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        color: mainColor,
+        height: double.infinity,
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Image.asset(
+              "assets/images/yape_logo2.png",
+              width: 250,
+            ),
+            const Text(
+              "Con el respaldo del BCP",
+              style: TextStyle(color: Colors.white54),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class AppStartupErrorWidget extends StatelessWidget {
+  const AppStartupErrorWidget({super.key, required this.error});
+  final Object error;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: mainColor,
+      body: Center(child: Text(error.toString())),
+    );
+  }
+}

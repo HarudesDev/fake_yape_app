@@ -5,6 +5,7 @@ import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:gap/gap.dart';
 
@@ -21,6 +22,8 @@ class _LoggedSecureKeyboardState extends State<LoggedSecureKeyboard> {
   List<String> keyNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
   static const _secureStorage = FlutterSecureStorage();
   final _supaBase = Supabase.instance.client;
+
+  final localAuth = LocalAuthentication();
 
   @override
   void initState() {
@@ -65,7 +68,7 @@ class _LoggedSecureKeyboardState extends State<LoggedSecureKeyboard> {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 60.0),
+          padding: const EdgeInsets.symmetric(horizontal: 50.0),
           child: _password.isNotEmpty
               ? SizedBox(
                   height: 31,
@@ -95,6 +98,7 @@ class _LoggedSecureKeyboardState extends State<LoggedSecureKeyboard> {
         Padding(
           padding: const EdgeInsets.fromLTRB(10.0, 10, 10, 30),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               Row(
                 children: [
@@ -146,9 +150,30 @@ class _LoggedSecureKeyboardState extends State<LoggedSecureKeyboard> {
               ),
               Row(
                 children: [
+                  //TODO Añadir login biometrico
                   Expanded(
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        localAuth
+                            .authenticate(localizedReason: "Ingrese sesión")
+                            .then((onValue) async {
+                          _secureStorage.read(key: "password").then((value) {
+                            if (value != null && value.length == 6) {
+                              _password = value;
+                              _signIn();
+                            } else {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        "Se dio un error al ingresar biométricamente"),
+                                  ),
+                                );
+                              }
+                            }
+                          });
+                        });
+                      },
                       icon: const Icon(
                         Icons.tag_faces,
                         color: mainColor,
@@ -199,7 +224,7 @@ class LoggedSecureKeyboardKey extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(6.0),
         child: SizedBox(
-          height: 65,
+          height: 50,
           child: ElevatedButton(
             onPressed: onPress,
             style: ButtonStyle(

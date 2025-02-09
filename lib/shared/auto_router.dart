@@ -56,14 +56,14 @@ class AuthGuard extends AutoRouteGuard {
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) async {
     const storage = FlutterSecureStorage();
-    final hasLogged = await storage.read(key: "email");
-    print("has Logged: $hasLogged");
+    final loggedEmail = await storage.read(key: "email");
     final auth = Supabase.instance.client.auth;
     final user = auth.currentUser;
     if (user != null) {
       resolver.next(true);
     } else {
-      if (hasLogged == null) {
+      if (loggedEmail == null) {
+        router.replaceAll([]);
         resolver.redirect(const WelcomeRoute());
       } else {
         resolver.redirect(const LoggedAccessRoute());

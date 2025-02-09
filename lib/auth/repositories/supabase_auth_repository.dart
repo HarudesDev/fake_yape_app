@@ -7,6 +7,26 @@ class SupabaseAuthRepository {
   User? get getUser => supabaseAuth.currentUser;
 
   SupabaseAuthRepository(this.supabaseAuth);
+
+  Future<AuthResponse> signIn(String email, String password) async {
+    final response = await supabaseAuth.signInWithPassword(
+      email: email,
+      password: password,
+    );
+    return response;
+  }
+
+  Future<AuthResponse> signUp(
+      String email, String password, Map<String, dynamic>? userData) async {
+    final response = supabaseAuth.signUp(
+      email: email,
+      password: password,
+      data: userData,
+    );
+    return response;
+  }
+
+  String? get getAccessToken => supabaseAuth.currentSession?.accessToken;
 }
 
 final supabaseAuthProvider =

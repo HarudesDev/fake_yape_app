@@ -3,47 +3,72 @@ import 'dart:developer';
 import 'package:auto_route/auto_route.dart';
 import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_components.dart';
 import 'package:fake_yape_app/auth/pages/secure_keyboard_page/secure_keyboard_page.dart';
+import 'package:fake_yape_app/auth/repositories/supabase_auth_repository.dart';
 import 'package:fake_yape_app/shared/auto_router.gr.dart';
 import 'package:fake_yape_app/shared/style.dart';
+import 'package:fake_yape_app/yape/repositories/supabase_database_repository.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SecureKeyboard extends StatefulWidget {
+class SecureKeyboard extends ConsumerStatefulWidget {
   const SecureKeyboard(
       {super.key, required this.parameters, required this.pageType});
 
   final Map<String, dynamic> parameters;
   final SecureKeyboardPageType pageType;
   @override
-  State<SecureKeyboard> createState() => _SecureKeyboardState();
+  ConsumerState<SecureKeyboard> createState() => _SecureKeyboardState();
 }
 
-class _SecureKeyboardState extends State<SecureKeyboard> {
+class _SecureKeyboardState extends ConsumerState<SecureKeyboard> {
   String _password = "";
-  final _supaBase = Supabase.instance.client;
   static const _secureStorage = FlutterSecureStorage();
+  final supabase = Supabase.instance.client;
 
   List<String> keyNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
+  Future<void> _setFcmToken(String fcmToken) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId != null) {
+      await supabase
+          .from('users')
+          .update({'fcm_token': fcmToken}).eq('auth_service_id', userId);
+    }
+  }
+
+  Future<void> _writeDataInSecureStorage(
+      String phoneNumber, String fullName) async {
+    await _secureStorage.write(key: "email", value: widget.parameters['email']);
+    await _secureStorage.write(key: "password", value: _password);
+    await _secureStorage.write(
+        key: "QRData",
+        value: '{"phoneNumber":"+51$phoneNumber"'
+            ',"userName":"$fullName"}');
+  }
+
   Future<void> _signIn() async {
+    final authRepository = ref.read(supabaseAuthRepositoryProvider);
     try {
-      final response = await _supaBase.auth.signInWithPassword(
-        email: widget.parameters['email'],
-        password: _password,
+      final response = await authRepository.signIn(
+        widget.parameters['email'],
+        _password,
       );
       if (mounted && response.session != null) {
         final userData = response.user!.userMetadata!;
-        await _secureStorage.write(
-            key: "email", value: widget.parameters['email']);
-        await _secureStorage.write(key: "password", value: _password);
-        await _secureStorage.write(
-            key: "QRData",
-            value: '{"phoneNumber":"+51${userData['phoneNumber']}"'
-                ',"userName":"${userData['fullName']}"}');
+        _writeDataInSecureStorage(
+            userData['phoneNumber'], userData['fullName']);
         AutoRouter.of(context).replaceAll([const HomeRoute()]);
         log("Ingreso exitoso");
+        await FirebaseMessaging.instance.requestPermission();
+
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        if (fcmToken != null) {
+          _setFcmToken(fcmToken);
+        }
       }
     } on AuthException catch (error) {
       log(error.message);
@@ -51,16 +76,14 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
       if (mounted) {
         log('Unexpected error occurred');
       }
-    } finally {
-      log(_supaBase.auth.currentUser != null
-          ? _supaBase.auth.currentUser!.id
-          : "Sin acceder");
     }
   }
 
   Future<void> _register() async {
     log("loading");
     final parameters = widget.parameters;
+    final authRepository = ref.read(supabaseAuthRepositoryProvider);
+    final databaseRepository = ref.read(supabaseDatabaseRepositoryProvider);
     if (_password != parameters['password']) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -70,34 +93,28 @@ class _SecureKeyboardState extends State<SecureKeyboard> {
       return;
     }
     try {
-      final authStatus = await _supaBase.auth.signUp(
-        password: _password,
-        email: parameters['email'],
-        data: {
-          'phoneNumber': parameters['phoneNumber'],
-          'documentType': parameters['documentType'],
-          'documentNumber': parameters['documentNumber'],
-          'fullName': parameters['fullName'],
-        },
+      final userData = {
+        'phoneNumber': parameters['phoneNumber'],
+        'documentType': parameters['documentType'],
+        'documentNumber': parameters['documentNumber'],
+        'fullName': parameters['fullName'],
+      };
+      final authStatus = await authRepository.signUp(
+        parameters['email'],
+        _password,
+        userData,
       );
 
       if (authStatus.user != null) {
         log(authStatus.user!.id);
-        await _supaBase.from('users').insert({
-          'fullname': parameters['fullName'],
-          'phone_number': parameters['phoneNumber'],
-          'account_balance': 500,
-          'auth_service_id': authStatus.user!.id,
-        });
+        await databaseRepository.createUser(
+          parameters['fullName'],
+          parameters['phoneNumber'],
+          authStatus.user!.id,
+        );
+        _writeDataInSecureStorage(
+            userData['phoneNumber'], userData['fullName']);
         if (mounted) {
-          await _secureStorage.write(
-              key: "email", value: widget.parameters['email']);
-          await _secureStorage.write(key: "password", value: _password);
-          await _secureStorage.write(
-              key: "QRData",
-              value: '{"phoneNumber":"+51${parameters['phoneNumber']}"'
-                  ',"userName":"${parameters['fullName']}"}');
-
           AutoRouter.of(context).replaceAll([const HomeRoute()]);
         }
       }

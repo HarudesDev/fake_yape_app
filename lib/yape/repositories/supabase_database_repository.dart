@@ -149,6 +149,16 @@ class SupabaseDatabaseRepository {
     }
   }
 
+  Future<void> createUser(
+      String fullName, String phoneNumber, String authServiceId) async {
+    _supabase.from('users').insert({
+      'fullname': fullName,
+      'phone_number': phoneNumber,
+      'account_balance': 500,
+      'auth_service_id': authServiceId,
+    });
+  }
+
   Future<bool> isPhoneNumberUnregistered(String phoneNumber) async {
     final query = await _supabase
         .from('users')
